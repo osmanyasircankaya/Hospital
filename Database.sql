@@ -6,21 +6,21 @@ CREATE DATABASE HastaneRandevu
 
 CREATE TABLE Poliklinik
 (
-	ID	int PRIMARY KEY NOT NULL,	
-	Ad	varchar(255) NOT NULL,			
+	ID		int PRIMARY KEY NOT NULL,	
+	Ad		varchar(255) NOT NULL,			
 )
 
 CREATE TABLE Doktor
 (
-	ID	int PRIMARY KEY NOT NULL,
-	Ad	varchar(255) NOT NULL,
-	Soyad	varchar(255) NOT NULL,
-	PolID	int FOREIGN KEY REFERENCES Poliklinik(ID),
+	ID		int PRIMARY KEY NOT NULL,
+	Ad		varchar(255) NOT NULL,
+	Soyad		varchar(255) NOT NULL,
+	PolID		int FOREIGN KEY REFERENCES Poliklinik(ID),
 )
 
 CREATE TABLE Hasta
 (	
-	ID	varchar(11) PRIMARY KEY NOT NULL,
+	ID		varchar(11) PRIMARY KEY NOT NULL,
 )
 
 CREATE TABLE Randevu
@@ -28,7 +28,7 @@ CREATE TABLE Randevu
 	ID		int IDENTITY(0,1) PRIMARY KEY NOT NULL,
 	Gün		date NOT NULL,
 	Saat		time NOT NULL,
-	DoluBilgisi BIT NOT NULL,
+	DoluBilgisi 	BIT NOT NULL,
 
 	DoktorID	int FOREIGN KEY REFERENCES Doktor(ID),
 	HastaTC		varchar(11) FOREIGN KEY REFERENCES Hasta(ID)
