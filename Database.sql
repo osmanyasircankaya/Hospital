@@ -14,8 +14,8 @@ CREATE TABLE Doktor
 (
 	ID		int PRIMARY KEY NOT NULL,
 	Ad		varchar(255) NOT NULL,
-	Soyad	varchar(255) NOT NULL,
-	PolID	int FOREIGN KEY REFERENCES Poliklinik(ID),
+	Soyad		varchar(255) NOT NULL,
+	PolID		int FOREIGN KEY REFERENCES Poliklinik(ID),
 )
 
 CREATE TABLE Hasta
@@ -25,10 +25,10 @@ CREATE TABLE Hasta
 
 CREATE TABLE Randevu
 (
-	ID			int IDENTITY(0,1) PRIMARY KEY NOT NULL,
-	Gün			date NOT NULL,
+	ID		int IDENTITY(0,1) PRIMARY KEY NOT NULL,
+	GÃ¼n		date NOT NULL,
 	Saat		time NOT NULL,
-	DoluBilgisi BIT NOT NULL,
+	DoluBilgisi 	BIT NOT NULL,
 
 	DoktorID	int FOREIGN KEY REFERENCES Doktor(ID),
 	HastaTC		varchar(11) FOREIGN KEY REFERENCES Hasta(ID)
@@ -41,10 +41,10 @@ VALUES
 
 INSERT INTO Doktor
 VALUES
-(1, 'Utku Gümüþ', 1),
-(2, 'Yeþim Öztaþ', 1),
+(1, 'Utku GÃ¼mÃ¼ÅŸ', 1),
+(2, 'YeÅŸim Ã–ztaÅŸ', 1),
 (3, 'Kemal Baycan', 2),
-(4, 'Nazlý Atan', 2)
+(4, 'NazlÄ± Atan', 2)
 
 DECLARE	@count int = 0
 DECLARE	@i date = CAST( GETDATE() AS Date )
