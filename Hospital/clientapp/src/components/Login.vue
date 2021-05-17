@@ -39,9 +39,9 @@ export default {
   methods: {
     onSubmit() {
       if (this.validation) {
-        alert("Form submitted!");
+        this.$router.push('Menu')
       } else {
-        alert("Form not submitted!");
+        alert("Kimlik Numarası 11 haneli olmak zorundadır")
       }
     },
   },

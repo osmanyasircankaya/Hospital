@@ -4,9 +4,7 @@ import App from './App.vue'
 import ApiService from '@/core/api.service'
 import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import Vuelidate from 'vuelidate'
 
-Vue.use(Vuelidate)
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'

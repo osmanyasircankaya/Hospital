@@ -19,11 +19,12 @@
 </template>
 
 <script>
-
 export default {
-    name: "Menu",
-    data() {
-        
-    },
-}
+  name: "Menu",
+  data() {
+    return {
+      count: 0,
+    };
+  },
+};
 </script>

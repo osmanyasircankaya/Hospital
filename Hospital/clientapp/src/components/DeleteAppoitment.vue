@@ -1,15 +1,63 @@
 <template>
-  <div clas="d-flex justify-content-center">
-    
-  </div>
+  <v-app>
+    <v-container fill-height>
+      <v-row justify="center" align="center">
+        <v-col cols="12" sm="4">
+          <v-select
+            v-model="appoitmentId"
+            :item-text="(item) => item.id"
+            :items="appoitments"
+            label="Randevu"
+            solo
+          >
+            <template slot="selection" slot-scope="data">{{
+              data.item.name
+            }}</template>
+            <template slot="item" slot-scope="data">{{
+              data.item.name
+            }}</template></v-select
+          >
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
+import ApiService from "@/core/api.service.js";
 
 export default {
-    name: "DeleteAppoitment",
-    data() {
-        
+  name: "CreateAppoitment",
+  data() {
+    return {
+      appoitmentId: 0,
+      appoitments: [],
+    };
+  },
+  created() {
+    //this.getAppoitments();
+  },
+  methods: {
+    getAppoitments() {
+      ApiService.setHeader();
+      ApiService.get("api/Appoitment")
+        .then((response) => {
+          this.appoitments = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
     },
-}
+    deleteAppoitment(){
+      ApiService.setHeader()
+      ApiService.delete('api/Appoitment/' + this.editedItem.Id)
+        .then(() => {
+          this.getAppoitmentsFromApi()
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    }
+  },
+};
 </script>
