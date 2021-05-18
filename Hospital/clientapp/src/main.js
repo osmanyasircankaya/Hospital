@@ -4,6 +4,8 @@ import App from './App.vue'
 import ApiService from '@/core/api.service'
 import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import VueMask from 'v-mask'
+
 
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
@@ -19,6 +21,8 @@ Vue.config.productionTip = false
 
 // API service init
 ApiService.init()
+
+Vue.use(VueMask)
 
 new Vue({
   router,

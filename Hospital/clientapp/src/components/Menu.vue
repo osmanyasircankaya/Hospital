@@ -1,8 +1,14 @@
 <template>
   <div clas="d-flex justify-content-center">
+    <h1>MENÜ</h1>
     <div>
       <b-button class="mt-5" to="/CreateAppoitment" variant="primary" size="lg"
         >Randevu Al</b-button
+      >
+    </div>
+    <div>
+      <b-button class="mt-5" to="/Appoitments" variant="primary" size="lg"
+        >Randevularım</b-button
       >
     </div>
     <div>

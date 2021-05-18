@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <h1>RANDEVU İPTAL ET</h1>
     <v-container fill-height>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="4">
@@ -48,16 +49,16 @@ export default {
           alert(error);
         });
     },
-    deleteAppoitment(){
-      ApiService.setHeader()
-      ApiService.delete('api/Appoitment/' + this.editedItem.Id)
+    deleteAppoitment() {
+      ApiService.setHeader();
+      ApiService.delete("api/Appoitment/" + this.editedItem.Id)
         .then(() => {
-          this.getAppoitmentsFromApi()
+          this.getAppoitmentsFromApi();
         })
         .catch(function (error) {
           alert(error);
         });
-    }
+    },
   },
 };
 </script>

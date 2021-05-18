@@ -9,7 +9,7 @@
             id="input-1"
             v-model="CitizenNumber"
             type="text"
-            v-mask="'###########'"
+            v-mask="mask"
             :state="validation"
             placeholder="Kimlik Numaranızı Giriniz"
             required
@@ -26,16 +26,15 @@
 
 
 <script>
-import { mask } from "vue-the-mask";
 
 export default {
   name: "Login",
   data() {
     return {
+      mask: [/[1-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/],
       CitizenNumber: "",
     };
   },
-  directives: { mask },
   methods: {
     onSubmit() {
       if (this.validation) {

@@ -4,6 +4,7 @@ import Home from "@/components/Home.vue";
 import Login from "@/components/Login.vue";
 import Menu from "@/components/Menu.vue";
 import CreateAppoitment from "@/components/CreateAppoitment.vue";
+import Appoitments from "@/components/Appoitments.vue";
 import DeleteAppoitment from "@/components/DeleteAppoitment.vue";
 import Statistics from "@/components/Statistics.vue";
 
@@ -30,6 +31,11 @@ export default new Router({
       path: "/CreateAppoitment",
       name: "CreateAppoitment",
       component: CreateAppoitment,
+    },
+    {
+      path: "/Appoitments",
+      name: "Appoitments",
+      component: Appoitments,
     },
     {
       path: "/DeleteAppoitment",
