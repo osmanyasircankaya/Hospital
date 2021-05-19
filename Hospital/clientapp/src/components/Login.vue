@@ -26,18 +26,20 @@
 
 
 <script>
+import Vue from 'vue'
 
 export default {
   name: "Login",
   data() {
     return {
       mask: [/[1-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/],
-      CitizenNumber: "",
+      CitizenNumber: '',
     };
   },
   methods: {
     onSubmit() {
       if (this.validation) {
+        Vue.prototype.$userId = this.CitizenNumber
         this.$router.push('Menu')
       } else {
         alert("Kimlik Numarası 11 haneli olmak zorundadır")

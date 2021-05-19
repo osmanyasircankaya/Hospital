@@ -6,22 +6,23 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Hospital.Infrastructure.Repository
 {
-    public class PolyclinicRepository : IPolyclinicRepository
+    public class AppoitmentRepository : IAppoitmentRepository
     {
         private readonly IConfiguration configuration;
-        public PolyclinicRepository(IConfiguration configuration)
+        public AppoitmentRepository(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
-        public async Task<int> AddAsync(Polyclinic entity)
+
+        public async Task<int> AddAsync(Appoitment entity)
         {
             entity.AddedOn = DateTime.Now;
-            var sql = "Insert into Polyclinic (Name, AddedOn) VALUES (@Name,@AddedOn)";
+            var sql = "Insert into Appoitment (AppoitmentDate, IsEmpty, DoctorId, PatientId, AddedOn) " +
+                        "VALUES (@AppoitmentDate, @IsEmpty, @DoctorId, @PatientId, @AddedOn)";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -32,41 +33,42 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<int> DeleteAsync(int id)
         {
-            var sql = "DELETE FROM Polyclinic WHERE Id = @Id";
+            var sql = "DELETE FROM Appoitment WHERE Id = @Id";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, new { Id = id });
                 return result;
             }
-        }
-
-        public async Task<IReadOnlyList<Polyclinic>> GetAllAsync()
+        }   
+        
+        public async Task<IReadOnlyList<Appoitment>> GetAllAsync()
         {
-            var sql = "SELECT * FROM Polyclinic";
+            var sql = "SELECT * FROM Appoitment";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Polyclinic>(sql);
+                var result = await connection.QueryAsync<Appoitment>(sql);
                 return result.ToList();
             }
         }
 
-        public async Task<Polyclinic> GetByIdAsync(int id)
+        public async Task<Appoitment> GetByIdAsync(int id)
         {
-            var sql = "SELECT * FROM Polyclinic WHERE Id = @Id";
+            var sql = "SELECT * FROM Appoitment WHERE PatientId = @PatientId";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QuerySingleOrDefaultAsync<Polyclinic>(sql, new { Id = id });
+                var result = await connection.QuerySingleOrDefaultAsync<Appoitment>(sql, new { PatientId = id });
                 return result;
             }
         }
 
-        public async Task<int> UpdateAsync(Polyclinic entity)
+        public async Task<int> UpdateAsync(Appoitment entity)
         {
             entity.ModifiedOn = DateTime.Now;
-            var sql = "UPDATE Polyclinic SET Name = @Name, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
+            var sql = "UPDATE Appoitment SET AppoitmentDate = @AppoitmentDate, IsEmpty = @IsEmpty, DoctorId = @DoctorId, " +
+                         "PatientId = @PatientId, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();

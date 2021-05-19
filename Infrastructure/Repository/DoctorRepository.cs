@@ -22,7 +22,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<int> AddAsync(Doctor entity)
         {
             entity.AddedOn = DateTime.Now;
-            var sql = "Insert into Doctors (Name,AddedOn) VALUES (@Name,@AddedOn)";
+            var sql = "Insert into Doctor (FirstName, LastName, PolId, AddedOn) VALUES (@FirstName, @LastName, @PolId, @AddedOn)";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -33,7 +33,7 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<int> DeleteAsync(int id)
         {
-            var sql = "DELETE FROM Doctors WHERE Id = @Id";
+            var sql = "DELETE FROM Doctor WHERE Id = @Id";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -44,7 +44,7 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<IReadOnlyList<Doctor>> GetAllAsync()
         {
-            var sql = "SELECT * FROM Doctors";
+            var sql = "SELECT * FROM Doctor";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -55,7 +55,7 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<Doctor> GetByIdAsync(int id)
         {
-            var sql = "SELECT * FROM Doctors WHERE Id = @Id";
+            var sql = "SELECT * FROM Doctor WHERE Id = @Id";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -67,7 +67,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<int> UpdateAsync(Doctor entity)
         {
             entity.ModifiedOn = DateTime.Now;
-            var sql = "UPDATE Doctors SET Name = @Name, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
+            var sql = "UPDATE Doctors SET FirstName = @FirstName, LastName = @LastName, PolId = @PolId, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();

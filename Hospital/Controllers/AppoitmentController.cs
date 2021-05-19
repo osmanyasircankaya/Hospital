@@ -5,45 +5,45 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital.WebApi.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class DoctorController : ControllerBase
+    [ApiController]
+    public class AppoitmentController : ControllerBase
     {
-        private readonly IDoctor unitOfWork;
+        private readonly IAppoitment unitOfWork;
 
-        public DoctorController(IDoctor unitOfWork)
+        public AppoitmentController(IAppoitment unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
-         {
-            var data = await unitOfWork.Doctors.GetAllAsync();
+        {
+            var data = await unitOfWork.Appoitments.GetAllAsync();
             return Ok(data);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var data = await unitOfWork.Doctors.GetByIdAsync(id);
+            var data = await unitOfWork.Appoitments.GetByIdAsync(id);
             if (data == null) return Ok();
             return Ok(data);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Doctor Doctor)
+        public async Task<IActionResult> Add(Appoitment Appoitment)
         {
-            var data = await unitOfWork.Doctors.AddAsync(Doctor);
+            var data = await unitOfWork.Appoitments.AddAsync(Appoitment);
             return Ok(data);
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await unitOfWork.Doctors.DeleteAsync(id);
+            var data = await unitOfWork.Appoitments.DeleteAsync(id);
             return Ok(data);
         }
         [HttpPut]
-        public async Task<IActionResult> Update(Doctor Doctor)
+        public async Task<IActionResult> Update(Appoitment Appoitment)
         {
-            var data = await unitOfWork.Doctors.UpdateAsync(Doctor);
+            var data = await unitOfWork.Appoitments.UpdateAsync(Appoitment);
             return Ok(data);
         }
     }

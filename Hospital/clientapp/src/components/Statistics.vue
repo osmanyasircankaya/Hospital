@@ -12,7 +12,7 @@
           </thead>
           <tbody>
             <tr v-for="item in patients" :key="item.citizenNumber">
-              <td>{{ item.citizenNumber }}</td>
+              <td>{{ item.id }}</td>
               <td>{{ item.addedOn }}</td>
             </tr>
           </tbody>
@@ -25,12 +25,14 @@
           <thead>
             <tr>
               <th class="text-left">İsim</th>
+              <th class="text-left">Soyisim</th>
               <th class="text-left">Kayıt Tarihi</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in doctors" :key="item.name">
-              <td>{{ item.name }}</td>
+              <td>{{ item.firstName }}</td>
+              <td>{{ item.lastName }}</td>
               <td>{{ item.addedOn }}</td>
             </tr>
           </tbody>
@@ -55,6 +57,20 @@
         </template>
       </v-simple-table>
     </div>
+    <div class="d-flex justify-content-center mb-5">
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in appoitments" :key="item.Name">
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </div>
   </div>
 </template>
 
@@ -68,12 +84,14 @@ export default {
       doctors: [],
       patients: [],
       polyclinics: [],
+      appoitments: []
     };
   },
   created() {
     this.getDoctors();
     this.getPatients();
     this.getPolyclinics();
+    this.getAppoitments();
   },
   methods: {
     getDoctors() {
@@ -101,6 +119,16 @@ export default {
       ApiService.get("api/Polyclinic")
         .then((response) => {
           this.polyclinics = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+    getAppoitments() {
+      ApiService.setHeader();
+      ApiService.get("api/Appoitment")
+        .then((response) => {
+          this.appoitments = response.data;
         })
         .catch(function (error) {
           alert(error);

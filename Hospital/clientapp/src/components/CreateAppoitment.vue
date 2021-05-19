@@ -6,7 +6,7 @@
         <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
             <v-select
-              v-model="polyclinicId"
+              v-model="polId"
               :item-text="(item) => item.id"
               :items="polyclinics"
               label="Poliklinik"
@@ -29,12 +29,12 @@
               label="Doktor"
               solo
             >
-              <template slot="selection" slot-scope="data">{{
-                data.item.name
-              }}</template>
-              <template slot="item" slot-scope="data">{{
-                data.item.name
-              }}</template></v-select
+              <template slot="selection" slot-scope="data"
+                >{{ data.item.firstName }} {{ data.item.lastName }}
+              </template>
+              <template slot="item" slot-scope="data"
+                >{{ data.item.firstName }} {{ data.item.lastName }}</template
+              ></v-select
             >
           </v-col>
         </v-row>
@@ -74,7 +74,7 @@ export default {
   name: "CreateAppoitment",
   data() {
     return {
-      polyclinicId: 0,
+      polId: 0,
       polyclinics: [],
       doctors: [],
       doctorId: 0,
@@ -87,14 +87,15 @@ export default {
     };
   },
   created() {
-    //this.getPolyclinics();
+    this.getPolyclinics();
   },
+
   methods: {
     allowedHours: (v) => v >= 8 || v < 6,
     allowedMinutes: (v) => v == 15,
     allowedStep: (m) => m % 15 === 0,
     submit() {
-      alert("submit");
+      alert("daha gelmedik buraya kadar");
     },
     getPolyclinics() {
       ApiService.setHeader();

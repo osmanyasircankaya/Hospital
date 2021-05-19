@@ -12,10 +12,10 @@
             solo
           >
             <template slot="selection" slot-scope="data">{{
-              data.item.name
+              data.item.id
             }}</template>
             <template slot="item" slot-scope="data">{{
-              data.item.name
+              data.item.id
             }}</template></v-select
           >
         </v-col>
@@ -26,6 +26,7 @@
 
 <script>
 import ApiService from "@/core/api.service.js";
+import Vue from "vue";
 
 export default {
   name: "CreateAppoitment",
@@ -33,15 +34,16 @@ export default {
     return {
       appoitmentId: 0,
       appoitments: [],
+      userId: 0,
     };
   },
   created() {
-    //this.getAppoitments();
+    this.getUserId();
   },
   methods: {
     getAppoitments() {
       ApiService.setHeader();
-      ApiService.get("api/Appoitment")
+      ApiService.get("api/Appoitment", this.userId)
         .then((response) => {
           this.appoitments = response.data;
         })
@@ -53,11 +55,15 @@ export default {
       ApiService.setHeader();
       ApiService.delete("api/Appoitment/" + this.editedItem.Id)
         .then(() => {
-          this.getAppoitmentsFromApi();
+          this.getAppoitments();
         })
         .catch(function (error) {
           alert(error);
         });
+    },
+    getUserId() {
+      this.userId = Vue.prototype.$userId
+      this.getAppoitments();
     },
   },
 };

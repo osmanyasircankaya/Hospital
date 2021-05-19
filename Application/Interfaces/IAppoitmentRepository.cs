@@ -2,7 +2,7 @@
 
 namespace Hospital.Application.Interfaces
 {
-    public interface IDoctorRepository : IGenericRepository<Doctor>
+    public interface IAppoitmentRepository : IGenericRepository<Appoitment>
     {
     }
 }

@@ -9,10 +9,8 @@ const ApiService = {
     Vue.axios.defaults.baseURL = process.env.VUE_APP_API_URL
   },
 
-  setHeader() {
-    
+  setHeader() {},
   
-  },
   showError(data) {
     if (data.status && data.status === 401) {
       Swal.fire({

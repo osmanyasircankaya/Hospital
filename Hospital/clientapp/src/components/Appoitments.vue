@@ -22,7 +22,7 @@ export default {
     };
   },
   created() {
-    //this.getAppoitments();
+    this.getAppoitments();
   },
   methods: {
     getAppoitments() {
