@@ -34,7 +34,7 @@ namespace Hospital
             });
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cbs", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Paint Hospital", Version = "v1" });
             });
         }
 
