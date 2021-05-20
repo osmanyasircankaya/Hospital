@@ -28,6 +28,14 @@ namespace Hospital.WebApi.Controllers
             if (data == null) return Ok();
             return Ok(data);
         }
+        [HttpGet("GetAllByPatientId/{patientId}")]
+        public async Task<IActionResult> GetAllByPatientIdAsync(int patientId)
+        {
+            var data = await unitOfWork.Appoitments.GetAppoitmentsByPatientIdAsync(patientId);
+            if (data == null) return Ok();
+            return Ok(data);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> Add(Appoitment Appoitment)
         {
@@ -46,5 +54,6 @@ namespace Hospital.WebApi.Controllers
             var data = await unitOfWork.Appoitments.UpdateAsync(Appoitment);
             return Ok(data);
         }
+
     }
 }

@@ -28,6 +28,13 @@ namespace Hospital.WebApi.Controllers
             if (data == null) return Ok();
             return Ok(data);
         }
+        [HttpGet("GetAllByPolId/{polId}")]
+        public async Task<IActionResult> GetAllByPolIdAsync(int polId)
+        {
+            var data = await unitOfWork.Doctors.GetDoctorsByPolIdAsync(polId);
+            if (data == null) return Ok();
+            return Ok(data);
+        }
         [HttpPost]
         public async Task<IActionResult> Add(Doctor Doctor)
         {

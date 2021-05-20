@@ -4,5 +4,6 @@ namespace Hospital.Application.Interfaces
 {
     public interface IPatientRepository : IGenericRepository<Patient>
     {
+        
     }
 }

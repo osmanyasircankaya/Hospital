@@ -64,6 +64,18 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
+        
+        public async Task<IReadOnlyList<Doctor>> GetDoctorsByPolIdAsync(int polId)
+        {
+            var sql = "SELECT * FROM Doctor Where PolId=@polId";
+            using (var connection= new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<Doctor>(sql, new { polId = polId });
+                return result.ToList();
+            }
+        }
+
         public async Task<int> UpdateAsync(Doctor entity)
         {
             entity.ModifiedOn = DateTime.Now;

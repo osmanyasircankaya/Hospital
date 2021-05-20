@@ -31,6 +31,12 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
+        //We have a problem 
+        public Task<Appoitment> DeleteAppoitmentByPatientIdAsync(int patientId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<int> DeleteAsync(int id)
         {
             var sql = "DELETE FROM Appoitment WHERE Id = @Id";
@@ -40,8 +46,20 @@ namespace Hospital.Infrastructure.Repository
                 var result = await connection.ExecuteAsync(sql, new { Id = id });
                 return result;
             }
-        }   
-        
+        }
+
+        //Denemesi yapılacak
+        public async Task<IReadOnlyList<Appoitment>> GetAppoitmentsByPatientIdAsync(int patientId)
+        {
+            var sql = "SELECT * FROM Appoitment where PatientId=@patientId";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<Appoitment>(sql, new { patientId = patientId });
+                return result.ToList();
+            }
+        }
+
         public async Task<IReadOnlyList<Appoitment>> GetAllAsync()
         {
             var sql = "SELECT * FROM Appoitment";
@@ -63,6 +81,8 @@ namespace Hospital.Infrastructure.Repository
                 return result;
             }
         }
+
+     
 
         public async Task<int> UpdateAsync(Appoitment entity)
         {
