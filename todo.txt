@@ -1,7 +1,7 @@
-randevu al menüsünde, doktorlar poliklinik id'ye göre getirilecek
-randevularım menüsünde, randevular patientId ye göre getirilecek
-randevu iptal et menüsünde, randevular patientId ye göre getirilecek
+randevu al menüsünde, doktorlar poliklinik id'ye göre getirilecek - --- Tamamlandı
+randevularım menüsünde, randevular patientId ye göre getirilecek ---- Tamamlandı 
+randevu iptal et menüsünde, randevular patientId ye göre getirilecek ---- Tamamlandı
 randevu iptal et menüsünde, patientId verilerek randevu iptal edilebilecek //Burada bir sıkıntı var. Hastaya ait tüm randevular mı silinecek yoksa gelen ilk randevu mu?
 istatistikler menüsünde nelerin yazdırılabileceği belirlenecek
-swagger eklenecek
+swagger eklenecek ---- Tamamlandı
 çalışma saatleri: 9-17, 12:30 - 13.30 tatil; cumartesi pazar tatil 
