@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background-image: url(background.png); background-size: cover">
     <h1>RANDEVULARIM</h1>
     <v-container fill-height>
       <v-row justify="center" align="center">

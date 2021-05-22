@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app style="background-image: url(background.png); background-size: cover">
     <h1>RANDEVU İPTAL ET</h1>
     <v-form>
     <v-container fill-height>
