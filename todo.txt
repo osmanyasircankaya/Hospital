@@ -5,3 +5,10 @@ randevu iptal et menüsünde, patientId verilerek randevu iptal edilebilecek //B
 istatistikler menüsünde nelerin yazdırılabileceği belirlenecek
 swagger eklenecek ---- Tamamlandı
 çalışma saatleri: 9-17, 12:30 - 13.30 tatil; cumartesi pazar tatil 
+
+-------------------------------------------------
+İstatistik ile ilgili yapılacaklar
+* İstatistiklerin görüntülenmesi için Günlük - Haftalık - Aylık ve Yıllık dönemler seçilebilecek.
+* Seçilen dönemlerde doktorların baktıkları hasta sayıları pasta grafiği ile gösterilebilir.
+* Seçilen dönemlerde alınan randevu sayıları bölümlere göre pasta grafiği ile gösterilebilir.
+* Hastaların randevu alma sıklığıyla ilgili bir istatistik tutulabilir.
