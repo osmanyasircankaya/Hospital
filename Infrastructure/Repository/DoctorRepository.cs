@@ -52,7 +52,6 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-
         public async Task<IReadOnlyList<Doctor>> GetDoctorsByPolIdAsync(int polId)
         {
             var sql = "SELECT * FROM Doctor Where PolId=@PolId";
