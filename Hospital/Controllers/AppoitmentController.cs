@@ -35,11 +35,10 @@ namespace Hospital.WebApi.Controllers
             if (data == null) return Ok();
             return Ok(data);
         }
-        
         [HttpPut]
-        public async Task<IActionResult> Add(Appoitment Appoitment)
+        public async Task<IActionResult> Upsert(Appoitment Appoitment)
         {
-            var data = await unitOfWork.Appoitments.AddAsync(Appoitment);
+            var data = await unitOfWork.Appoitments.UpsertAsync(Appoitment);
             return Ok(data);
         }
         [HttpDelete]
@@ -48,12 +47,11 @@ namespace Hospital.WebApi.Controllers
             var data = await unitOfWork.Appoitments.DeleteAsync(id);
             return Ok(data);
         }
-        //[HttpPut]
-        //public async Task<IActionResult> Update(Appoitment Appoitment)
-        //{
-        //    var data = await unitOfWork.Appoitments.UpdateAsync(Appoitment);
-        //    return Ok(data);
-        //}
-
+        [HttpDelete("DeleteAppoitmentByPatientId/{patientId}")]
+        public async Task<IActionResult> Delete(string patientId)
+        {
+            var data = await unitOfWork.Appoitments.DeleteAppoitmentByPatientIdAsync(patientId);
+            return Ok(data);
+        }
     }
 }

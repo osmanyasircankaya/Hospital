@@ -19,18 +19,6 @@ namespace Hospital.Infrastructure.Repository
             this.configuration = configuration;
         }
 
-        public async Task<int> AddAsync(Doctor entity)
-        {
-            entity.AddedOn = DateTime.Now;
-            var sql = "Insert into Doctor (FirstName, LastName, PolId, AddedOn) VALUES (@FirstName, @LastName, @PolId, @AddedOn)";
-            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
-            {
-                connection.Open();
-                var result = await connection.ExecuteAsync(sql, entity);
-                return result;
-            }
-        }
-
         public async Task<int> DeleteAsync(int id)
         {
             var sql = "DELETE FROM Doctor WHERE Id = @Id";
@@ -64,11 +52,11 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        
+
         public async Task<IReadOnlyList<Doctor>> GetDoctorsByPolIdAsync(int polId)
         {
             var sql = "SELECT * FROM Doctor Where PolId=@PolId";
-            using (var connection= new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QueryAsync<Doctor>(sql, new { PolId = polId });
@@ -76,10 +64,15 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<int> UpdateAsync(Doctor entity)
+        public async Task<int> UpsertAsync(Doctor entity)
         {
+            entity.AddedOn = DateTime.Now;
             entity.ModifiedOn = DateTime.Now;
-            var sql = "UPDATE Doctors SET FirstName = @FirstName, LastName = @LastName, PolId = @PolId, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
+            var sql = "IF EXISTS " +
+                "(SELECT * FROM Doctor WHERE Id = @Id) UPDATE Doctor SET FirstName = @FirstName, LastName = @LastName, PolId = @PolId, ModifiedOn = @ModifiedOn WHERE Id = @Id " +
+                "ELSE " +
+                "INSERT INTO Doctor (FirstName, LastName, PolId, AddedOn) VALUES (@FirstName, @LastName, @PolId, @AddedOn) ";
+
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();

@@ -28,22 +28,16 @@ namespace Hospital.WebApi.Controllers
             if (data == null) return Ok();
             return Ok(data);
         }
-        [HttpPost]
-        public async Task<IActionResult> Add(Polyclinic Polyclinic)
+        [HttpPut]
+        public async Task<IActionResult> Upsert(Polyclinic Polyclinic)
         {
-            var data = await unitOfWork.Polyclinics.AddAsync(Polyclinic);
+            var data = await unitOfWork.Polyclinics.UpsertAsync(Polyclinic);
             return Ok(data);
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             var data = await unitOfWork.Polyclinics.DeleteAsync(id);
-            return Ok(data);
-        }
-        [HttpPut]
-        public async Task<IActionResult> Update(Polyclinic Polyclinic)
-        {
-            var data = await unitOfWork.Polyclinics.UpdateAsync(Polyclinic);
             return Ok(data);
         }
     }

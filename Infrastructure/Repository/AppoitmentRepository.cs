@@ -18,23 +18,15 @@ namespace Hospital.Infrastructure.Repository
             this.configuration = configuration;
         }
 
-        public async Task<int> AddAsync(Appoitment entity)
+        public async Task<int> DeleteAppoitmentByPatientIdAsync(string patientId)
         {
-            entity.AddedOn = DateTime.Now;
-            var sql = "Insert into Appoitment (AppoitmentDate, IsEmpty, DoctorId, PatientId, AddedOn) " +
-                        "VALUES (@AppoitmentDate, @IsEmpty, @DoctorId, @PatientId, @AddedOn)";
+            var sql = "DELETE FROM Appoitment WHERE PatientId = @PatientId";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.ExecuteAsync(sql, entity);
+                var result = await connection.ExecuteAsync(sql, new { PatientId = patientId });
                 return result;
             }
-        }
-
-        //We have a problem 
-        public Task<Appoitment> DeleteAppoitmentByPatientIdAsync(int patientId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<int> DeleteAsync(int id)
@@ -48,7 +40,6 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        //Denemesi yapılacak
         public async Task<IReadOnlyList<Appoitment>> GetAppoitmentsByPatientIdAsync(string patientId)
         {
             var sql = "SELECT * FROM Appoitment WHERE PatientId = @patientId";
@@ -82,11 +73,17 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<int> UpdateAsync(Appoitment entity)
+        public async Task<int> UpsertAsync(Appoitment entity)
         {
+            entity.AddedOn = DateTime.Now;
             entity.ModifiedOn = DateTime.Now;
-            var sql = "UPDATE Appoitment SET AppoitmentDate = @AppoitmentDate, IsEmpty = @IsEmpty, DoctorId = @DoctorId, " +
-                         "PatientId = @PatientId, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
+            var sql = "IF EXISTS " +
+                "(SELECT * FROM Appoitment WHERE Id = @Id) " +
+                "UPDATE Appoitment SET AppoitmentDate = @AppoitmentDate, IsEmpty = @IsEmpty, DoctorId = @DoctorId, " +
+                "PatientId = @PatientId, ModifiedOn = @ModifiedOn  WHERE Id = @Id " +
+                "ELSE " +
+                "INSERT INTO Appoitment (AppoitmentDate, IsEmpty, DoctorId, PatientId, AddedOn) VALUES (@AppoitmentDate, @IsEmpty, @DoctorId, @PatientId, @AddedOn) ";
+
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();

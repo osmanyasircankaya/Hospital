@@ -18,17 +18,6 @@ namespace Hospital.Infrastructure.Repository
         {
             this.configuration = configuration;
         }
-        public async Task<int> AddAsync(Polyclinic entity)
-        {
-            entity.AddedOn = DateTime.Now;
-            var sql = "Insert into Polyclinic (Name, AddedOn) VALUES (@Name,@AddedOn)";
-            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
-            {
-                connection.Open();
-                var result = await connection.ExecuteAsync(sql, entity);
-                return result;
-            }
-        }
 
         public async Task<int> DeleteAsync(int id)
         {
@@ -63,10 +52,15 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<int> UpdateAsync(Polyclinic entity)
+        public async Task<int> UpsertAsync(Polyclinic entity)
         {
+            entity.AddedOn = DateTime.Now;
             entity.ModifiedOn = DateTime.Now;
-            var sql = "UPDATE Polyclinic SET Name = @Name, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
+            var sql = "IF EXISTS " +
+                "(SELECT * FROM Polyclinic WHERE Id = @Id) UPDATE Polyclinic SET Name = @Name, ModifiedOn = @ModifiedOn  WHERE Id = @Id " +
+                "ELSE " +
+                "INSERT INTO Polyclinic (Name, AddedOn) VALUES (@Name,@AddedOn) ";
+
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();

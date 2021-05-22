@@ -14,7 +14,7 @@
 import ApiService from "@/core/api.service.js";
 
 export default {
-  name: "CreateAppoitment",
+  name: "Appoitments",
   data() {
     return {
       appoitmentId: 0,

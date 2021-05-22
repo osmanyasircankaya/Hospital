@@ -105,6 +105,7 @@ export default {
     allowedStep: (m) => m % 15 === 0,
     submit() {
       this.createAppoitment();
+      this.$router.push("Appoitments");
     },
     getUserId() {
       this.userId = Vue.prototype.$userId;
@@ -140,10 +141,10 @@ export default {
         });
     },
     createAppoitment() {
-        (this.appoitment.AppoitmentDate = this.appoitmentDate),
-        (this.appoitment.DoctorId = this.doctorId),
-        (this.appoitment.PatientId = this.userId),
-        ApiService.setHeader();
+      (this.appoitment.AppoitmentDate = this.appoitmentDate),
+      (this.appoitment.DoctorId = this.doctorId),
+      (this.appoitment.PatientId = this.userId),
+      ApiService.setHeader();
       ApiService.put("api/Appoitment", this.appoitment).catch(
         ({ response }) => {
           ApiService.showError(response);

@@ -1,14 +1,17 @@
 <template>
   <v-app>
     <h1>RANDEVU İPTAL ET</h1>
+    <v-form>
     <v-container fill-height>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="4">
+          <span>RANDEVU SEÇ</span>
           <v-select
             v-model="appoitmentId"
             :item-text="(item) => item.id"
             :items="appoitments"
             label="Randevu"
+            class="mt-2"
             solo
           >
             <template slot="selection" slot-scope="data">{{
@@ -21,6 +24,10 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-btn class="mr-4" color="primary" type="submit" @click="submit()">
+        İPTAL ET
+      </v-btn>
+    </v-form>
   </v-app>
 </template>
 
@@ -34,17 +41,24 @@ export default {
     return {
       appoitmentId: 0,
       appoitments: [],
-      userId: 0,
+      userId: '',
     };
   },
   created() {
     this.getUserId();
   },
   methods: {
+    submit() {
+      this.deleteAppoitment();
+      this.$router.push("Appoitments");
+    },
     getAppoitments() {
       ApiService.setHeader();
-      ApiService.get("api/Appoitment", this.userId)
+      ApiService.get("api/Appoitment/GetAllByPatientId", this.userId)
         .then((response) => {
+          if(response.data == null){
+            alert("randevu yok")
+          }
           this.appoitments = response.data;
         })
         .catch(function (error) {
@@ -53,9 +67,9 @@ export default {
     },
     deleteAppoitment() {
       ApiService.setHeader();
-      ApiService.delete("api/Appoitment/" + this.editedItem.Id)
+      ApiService.delete("api/Appoitment/DeleteAppoitmentByPatientId/" + this.userId)
         .then(() => {
-          this.getAppoitments();
+          //this.getAppoitments();
         })
         .catch(function (error) {
           alert(error);

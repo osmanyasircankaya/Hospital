@@ -4,6 +4,7 @@ namespace Hospital.Core.Entities
 {
     public class Appoitment
     {
+        public int Id { get; set; }
         public DateTime AppoitmentDate { get; set; }
         public bool IsEmpty { get; set; }
         public int DoctorId { get; set; }

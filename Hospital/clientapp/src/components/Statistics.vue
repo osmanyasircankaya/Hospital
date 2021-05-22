@@ -62,10 +62,16 @@
         <template v-slot:default>
           <thead>
             <tr>
+              <th class="text-left">Tarih</th>
+              <th class="text-left">Doktor</th>
+              <th class="text-left">Hasta</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in appoitments" :key="item.Name">
+            <tr v-for="item in appoitments" :key="item.id">
+              <td>{{ item.appoitmentDate }}</td>
+              <td>{{ item.doctorId }}</td>
+              <td>{{ item.patientId }}</td>
             </tr>
           </tbody>
         </template>

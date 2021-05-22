@@ -35,22 +35,16 @@ namespace Hospital.WebApi.Controllers
             if (data == null) return Ok();
             return Ok(data);
         }
-        [HttpPost]
-        public async Task<IActionResult> Add(Doctor Doctor)
+        [HttpPut]
+        public async Task<IActionResult> Upsert(Doctor Doctor)
         {
-            var data = await unitOfWork.Doctors.AddAsync(Doctor);
+            var data = await unitOfWork.Doctors.UpsertAsync(Doctor);
             return Ok(data);
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             var data = await unitOfWork.Doctors.DeleteAsync(id);
-            return Ok(data);
-        }
-        [HttpPut]
-        public async Task<IActionResult> Update(Doctor Doctor)
-        {
-            var data = await unitOfWork.Doctors.UpdateAsync(Doctor);
             return Ok(data);
         }
     }

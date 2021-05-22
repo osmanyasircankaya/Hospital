@@ -22,16 +22,16 @@ namespace Hospital.WebApi.Controllers
             return Ok(data);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(string id)
         {
-            var data = await unitOfWork.Patients.GetByIdAsync(id);
+            var data = await unitOfWork.Patients.GetPatientByIdAsync(id);
             if (data == null) return Ok();
             return Ok(data);
         }
         [HttpPut]
-        public async Task<IActionResult> Add(Patient Patient)
+        public async Task<IActionResult> Upsert(Patient Patient)
         {
-            var data = await unitOfWork.Patients.AddAsync(Patient);
+            var data = await unitOfWork.Patients.UpsertAsync(Patient);
             return Ok(data);
         }
         [HttpDelete]
@@ -40,11 +40,5 @@ namespace Hospital.WebApi.Controllers
             var data = await unitOfWork.Patients.DeleteAsync(id);
             return Ok(data);
         }
-        //[HttpPut]
-        //public async Task<IActionResult> Update(Patient Patient)
-        //{
-        //    var data = await unitOfWork.Patients.UpdateAsync(Patient);
-        //    return Ok(data);
-        //}
     }
 }

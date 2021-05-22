@@ -18,17 +18,6 @@ namespace Hospital.Infrastructure.Repository
         {
             this.configuration = configuration;
         }
-        public async Task<int> AddAsync(Patient entity)
-        {
-            entity.AddedOn = DateTime.Now;
-            var sql = "Insert into Patient (Id,AddedOn) VALUES (@Id,@AddedOn)";
-            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
-            {
-                connection.Open();
-                var result = await connection.ExecuteAsync(sql, entity);
-                return result;
-            }
-        }
 
         public async Task<int> DeleteAsync(int id)
         {
@@ -62,10 +51,26 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<int> UpdateAsync(Patient entity)
+        public async Task<Patient> GetPatientByIdAsync(string id)
         {
+            var sql = "SELECT * FROM Patient WHERE Id = @Id";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QuerySingleOrDefaultAsync<Patient>(sql, new { Id = id });
+                return result;
+            }
+        }
+
+        public async Task<int> UpsertAsync(Patient entity)
+        {
+            entity.AddedOn = DateTime.Now;
             entity.ModifiedOn = DateTime.Now;
-            var sql = "UPDATE Patient SET Id = @Id, ModifiedOn = @ModifiedOn  WHERE Id = @Id";
+            var sql = "IF EXISTS " +
+                "(SELECT * FROM Patient WHERE Id = @Id) UPDATE Patient SET Id = @Id, ModifiedOn = @ModifiedOn WHERE Id = @Id " +
+                "ELSE " +
+                "INSERT INTO Patient (Id,AddedOn) VALUES (@Id,@AddedOn) ";
+
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
