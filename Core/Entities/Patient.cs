@@ -6,6 +6,6 @@ namespace Hospital.Core.Entities
     {
         public string Id { get; set; }
         public DateTime AddedOn { get; set; }
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
     }
 }

@@ -40,23 +40,15 @@
         </v-row>
         <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
-            <v-date-picker
-              v-model="date"
-              class="mt-4"
-              min="2021-05-18"
-              max="2021-07-18"
-            ></v-date-picker>
-          </v-col>
-          <v-col cols="12" sm="4">
-            <v-time-picker
-              v-model="timeStep"
-              :allowed-hours="allowedHours"
-              :allowed-minutes="allowedStep"
-              class="mt-4"
-              scrollable
-              min="8:30"
-              max="17:30"
-            ></v-time-picker>
+            <v-datetime-picker
+              label="Traih Seçiniz"
+              v-model="appoitmentDate"
+              :date-picker-props="dateProps"
+              :time-picker-props="timeProps"
+            >
+              <template slot="dateIcon"> Tarih </template>
+              <template slot="timeIcon"> Saat </template>
+            </v-datetime-picker>
           </v-col>
         </v-row>
       </v-container>
@@ -69,33 +61,53 @@
 
 <script>
 import ApiService from "@/core/api.service.js";
+import Vue from "vue";
 
 export default {
   name: "CreateAppoitment",
   data() {
     return {
+      userId: "",
       polId: 0,
       polyclinics: [],
       doctors: [],
       doctorId: 0,
-      availableDays: [],
-      availableHours: [],
+      appoitment: {
+        AppoitmentDate: null,
+        IsEmpty: false,
+        DoctorId: 0,
+        PatientId: 0,
+      },
       appoitments: [],
-      date: "2021-05-18",
-      time: "11:15",
-      timeStep: "08:30",
+      appoitmentDate: new Date(),
+      dateProps: {
+        headerColor: "blue",
+        min: new Date().toISOString().substr(0, 10),
+        max: "2021-07-18",
+      },
+      timeProps: {
+        useSeconds: false,
+        ampmInTitle: false,
+        allowedHours: this.allowedHours,
+        allowedMinutes: this.allowedStep,
+        format: "24hr",
+        min: "9:00",
+        max: "17:00",
+      },
     };
   },
   created() {
     this.getPolyclinics();
+    this.getUserId();
   },
-
   methods: {
-    allowedHours: (v) => v >= 8 || v < 6,
-    allowedMinutes: (v) => v == 15,
+    allowedHours: (v) => v >= 8 || v < 17,
     allowedStep: (m) => m % 15 === 0,
     submit() {
-      alert("daha gelmedik buraya kadar");
+      this.createAppoitment();
+    },
+    getUserId() {
+      this.userId = Vue.prototype.$userId;
     },
     getPolyclinics() {
       ApiService.setHeader();
@@ -109,7 +121,7 @@ export default {
     },
     getDoctors() {
       ApiService.setHeader();
-      ApiService.get("api/Doctor")
+      ApiService.get("api/Doctor/GetAllByPolId", this.polId)
         .then((response) => {
           this.doctors = response.data;
         })
@@ -126,6 +138,17 @@ export default {
         .catch(function (error) {
           alert(error);
         });
+    },
+    createAppoitment() {
+        (this.appoitment.AppoitmentDate = this.appoitmentDate),
+        (this.appoitment.DoctorId = this.doctorId),
+        (this.appoitment.PatientId = this.userId),
+        ApiService.setHeader();
+      ApiService.put("api/Appoitment", this.appoitment).catch(
+        ({ response }) => {
+          ApiService.showError(response);
+        }
+      );
     },
   },
 };

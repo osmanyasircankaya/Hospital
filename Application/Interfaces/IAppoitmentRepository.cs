@@ -6,7 +6,7 @@ namespace Hospital.Application.Interfaces
 {
     public interface IAppoitmentRepository : IGenericRepository<Appoitment>
     {
-        Task<IReadOnlyList<Appoitment>> GetAppoitmentsByPatientIdAsync(int patientId);
+        Task<IReadOnlyList<Appoitment>> GetAppoitmentsByPatientIdAsync(string patientId);
         Task<Appoitment> DeleteAppoitmentByPatientIdAsync(int patientId);
     }
 }

@@ -49,13 +49,13 @@ namespace Hospital.Infrastructure.Repository
         }
 
         //Denemesi yapılacak
-        public async Task<IReadOnlyList<Appoitment>> GetAppoitmentsByPatientIdAsync(int patientId)
+        public async Task<IReadOnlyList<Appoitment>> GetAppoitmentsByPatientIdAsync(string patientId)
         {
-            var sql = "SELECT * FROM Appoitment where PatientId=@patientId";
+            var sql = "SELECT * FROM Appoitment WHERE PatientId = @patientId";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Appoitment>(sql, new { patientId = patientId });
+                var result = await connection.QueryAsync<Appoitment>(sql, new { PatientId = patientId });
                 return result.ToList();
             }
         }
@@ -81,8 +81,6 @@ namespace Hospital.Infrastructure.Repository
                 return result;
             }
         }
-
-     
 
         public async Task<int> UpdateAsync(Appoitment entity)
         {

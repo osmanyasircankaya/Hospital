@@ -9,6 +9,6 @@ namespace Hospital.Core.Entities
         public string LastName { get; set; }
         public int PolId { get; set; }
         public DateTime AddedOn { get; set; }
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
     }
 }

@@ -67,11 +67,11 @@ namespace Hospital.Infrastructure.Repository
         
         public async Task<IReadOnlyList<Doctor>> GetDoctorsByPolIdAsync(int polId)
         {
-            var sql = "SELECT * FROM Doctor Where PolId=@polId";
+            var sql = "SELECT * FROM Doctor Where PolId=@PolId";
             using (var connection= new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Doctor>(sql, new { polId = polId });
+                var result = await connection.QueryAsync<Doctor>(sql, new { PolId = polId });
                 return result.ToList();
             }
         }

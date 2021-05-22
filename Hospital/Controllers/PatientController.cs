@@ -28,7 +28,7 @@ namespace Hospital.WebApi.Controllers
             if (data == null) return Ok();
             return Ok(data);
         }
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> Add(Patient Patient)
         {
             var data = await unitOfWork.Patients.AddAsync(Patient);
@@ -40,11 +40,11 @@ namespace Hospital.WebApi.Controllers
             var data = await unitOfWork.Patients.DeleteAsync(id);
             return Ok(data);
         }
-        [HttpPut]
-        public async Task<IActionResult> Update(Patient Patient)
-        {
-            var data = await unitOfWork.Patients.UpdateAsync(Patient);
-            return Ok(data);
-        }
+        //[HttpPut]
+        //public async Task<IActionResult> Update(Patient Patient)
+        //{
+        //    var data = await unitOfWork.Patients.UpdateAsync(Patient);
+        //    return Ok(data);
+        //}
     }
 }

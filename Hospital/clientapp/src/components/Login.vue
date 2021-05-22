@@ -26,24 +26,50 @@
 
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
+import ApiService from "@/core/api.service.js";
 
 export default {
   name: "Login",
   data() {
     return {
-      mask: [/[1-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/,/[0-9]/],
-      CitizenNumber: '',
+      mask: [
+        /[1-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+      ],
+      CitizenNumber: "",
+      patient:{
+        Id: ''
+      }
     };
   },
   methods: {
     onSubmit() {
       if (this.validation) {
-        Vue.prototype.$userId = this.CitizenNumber
-        this.$router.push('Menu')
+        Vue.prototype.$userId = this.CitizenNumber;
+        this.createPatient()
+        this.$router.push("Menu");
       } else {
-        alert("Kimlik Numarası 11 haneli olmak zorundadır")
+        alert("Kimlik Numarası 11 haneli olmak zorundadır");
       }
+    },
+    createPatient() {
+      this.patient.Id = this.CitizenNumber
+      ApiService.setHeader();
+      ApiService.put("api/Patient", this.patient).catch(
+        ({ response }) => {
+          ApiService.showError(response);
+        }
+      );
     },
   },
   computed: {

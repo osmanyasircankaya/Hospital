@@ -20,6 +20,9 @@ Vue.config.productionTip = false
 // API service init
 ApiService.init()
 
+import DatetimePicker from 'vuetify-datetime-picker'
+Vue.use(DatetimePicker)
+
 Vue.use(VueMask)
 
 Vue.prototype.$userId = '' 
