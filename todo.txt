@@ -9,7 +9,7 @@ swagger eklenecek ---- Tamamlandı
 -------------------------------------------------
 İstatistik ile ilgili yapılacaklar
 * İstatistiklerin görüntülenmesi için Günlük - Haftalık - Aylık ve Yıllık dönemler seçilebilecek.
-* Seçilen dönemlerde doktorların baktıkları hasta sayıları pasta grafiği ile gösterilebilir.
+* Seçilen dönemlerde doktorların baktıkları hasta sayıları pasta grafiği ile gösterilebilir. -- doktorların randevuları olarak değiştirildi
 * Seçilen dönemlerde alınan randevu sayıları bölümlere göre pasta grafiği ile gösterilebilir.
 * Hastaların randevu alma sıklığıyla ilgili bir istatistik tutulabilir.
 * 10'a tamamlanacak
