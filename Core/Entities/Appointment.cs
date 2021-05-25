@@ -2,7 +2,7 @@
 
 namespace Hospital.Core.Entities
 {
-    public class Appoitment
+    public class Appointment
     {
         public int Id { get; set; }
         public DateTime AppoitmentDate { get; set; }

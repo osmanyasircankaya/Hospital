@@ -2,6 +2,6 @@
 {
     public interface IAppoitment
     {
-        IAppoitmentRepository Appoitments { get; }
+        IAppointmentRepository Appoitments { get; }
     }
 }

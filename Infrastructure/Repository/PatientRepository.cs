@@ -30,7 +30,7 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<IReadOnlyList<Patient>> GetAllAsync()
+        public async Task<IReadOnlyList<Patient>> GetAllAsync(string sqlCommand=null)
         {
             var sql = "SELECT * FROM Patient";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))

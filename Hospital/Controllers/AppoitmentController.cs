@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Hospital.Application.Interfaces;
 using Hospital.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -31,12 +32,31 @@ namespace Hospital.WebApi.Controllers
         [HttpGet("GetAllByPatientId/{patientId}")]
         public async Task<IActionResult> GetAllByPatientIdAsync(string patientId)
         {
-            var data = await unitOfWork.Appoitments.GetAppoitmentsByPatientIdAsync(patientId);
+            var data = await unitOfWork.Appoitments.GetAppointmentsByPatientIdAsync(patientId);
             if (data == null) return Ok();
             return Ok(data);
         }
+        //Doktorların belirli günler aralığındaki randevuları
+        [HttpGet("GetSizeByDoctorId/{doctorId}/{day}")]
+        public async Task<IActionResult> GetSizeByDoctorId(int doctorId,int day)
+        {
+            var data = await unitOfWork.Appoitments.GetAppointmentsSizeByDoctorId(doctorId, _dateTimeParse(day));
+            return Ok(data);
+        }
+
+        //Polikliniğe göre belirli gün aralığındaki randevular
+        //Sorunlu.
+        [HttpGet("GetSizeByPolyclinicId/{polId}/{day}")]
+        
+        public async Task<IActionResult> GetSizeByPolId(int polId,int day)
+        {
+            var data = await unitOfWork.Appoitments.GetAppoimentsSizeByPolId(polId, _dateTimeParse(day));
+            return Ok(data);
+        }
+        
+        
         [HttpPut]
-        public async Task<IActionResult> Upsert(Appoitment Appoitment)
+        public async Task<IActionResult> Upsert(Appointment Appoitment)
         {
             var data = await unitOfWork.Appoitments.UpsertAsync(Appoitment);
             return Ok(data);
@@ -50,8 +70,15 @@ namespace Hospital.WebApi.Controllers
         [HttpDelete("DeleteAppoitmentByPatientId/{patientId}")]
         public async Task<IActionResult> Delete(string patientId)
         {
-            var data = await unitOfWork.Appoitments.DeleteAppoitmentByPatientIdAsync(patientId);
+            var data = await unitOfWork.Appoitments.DeleteAppointmentByIdAsync(patientId);
             return Ok(data);
+        }
+
+        private string _dateTimeParse(int day)
+        {
+            var dateTime = DateTime.Now.Subtract(TimeSpan.FromDays(day));
+            var dateString = dateTime.ToString("yyyy-M-dd hh:mm:ss");
+            return dateString;
         }
     }
 }

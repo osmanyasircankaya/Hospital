@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace Hospital.Infrastructure.Repository
 {
-    public class AppoitmentRepository : IAppoitmentRepository
+    public class AppointmentRepository : IAppointmentRepository
     {
         private readonly IConfiguration configuration;
-        public AppoitmentRepository(IConfiguration configuration)
+        public AppointmentRepository(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
 
-        public async Task<int> DeleteAppoitmentByPatientIdAsync(string patientId)
+        public async Task<int> DeleteAppointmentByIdAsync(string patientId)
         {
             var sql = "DELETE FROM Appoitment WHERE PatientId = @PatientId";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
@@ -40,40 +40,40 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<IReadOnlyList<Appoitment>> GetAppoitmentsByPatientIdAsync(string patientId)
+        public async Task<IReadOnlyList<Appointment>> GetAppointmentsByPatientIdAsync(string patientId)
         {
             var sql = "SELECT * FROM Appoitment WHERE PatientId = @patientId";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Appoitment>(sql, new { PatientId = patientId });
+                var result = await connection.QueryAsync<Appointment>(sql, new { PatientId = patientId });
                 return result.ToList();
             }
         }
 
-        public async Task<IReadOnlyList<Appoitment>> GetAllAsync()
+        public async Task<IReadOnlyList<Appointment>> GetAllAsync(string sqlCommand=null)
         {
             var sql = "SELECT * FROM Appoitment";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Appoitment>(sql);
+                var result = await connection.QueryAsync<Appointment>(sql);
                 return result.ToList();
             }
         }
 
-        public async Task<Appoitment> GetByIdAsync(int id)
+        public async Task<Appointment> GetByIdAsync(int id)
         {
             var sql = "SELECT * FROM Appoitment WHERE PatientId = @PatientId";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QuerySingleOrDefaultAsync<Appoitment>(sql, new { PatientId = id });
+                var result = await connection.QuerySingleOrDefaultAsync<Appointment>(sql, new { PatientId = id });
                 return result;
             }
         }
 
-        public async Task<int> UpsertAsync(Appoitment entity)
+        public async Task<int> UpsertAsync(Appointment entity)
         {
             entity.AddedOn = DateTime.Now;
             entity.ModifiedOn = DateTime.Now;
@@ -91,5 +91,30 @@ namespace Hospital.Infrastructure.Repository
                 return result;
             }
         }
+
+        public async Task<int> GetAppointmentsSizeByDoctorId(int doctorId,string date=null)
+        {
+            var defaultSql = "Select count(*) from appoitment where doctorId=@doctorId";
+            var adding = defaultSql+$"and AppoitmentDate Between '{date}' and GETDATE()";
+            var sql = date == null ? defaultSql : adding;
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<int>(sql,new {doctorId=doctorId });
+                return result.First();
+            }
+        }
+
+        public async Task<int> GetAppoimentsSizeByPolId(int polId, string date=null)
+        {
+            var sql= $"Select count(*) from appoitment where polId=@polId and AppoitmentDate Between '{date}' and GETDATE()";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<int>(sql, new { polId = polId });
+                return result.First();
+            }
+        }
+
     }
 }

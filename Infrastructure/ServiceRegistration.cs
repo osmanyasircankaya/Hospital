@@ -11,11 +11,11 @@ namespace Hospital.Infrastructure
             services.AddTransient<IDoctorRepository, DoctorRepository>();
             services.AddTransient<IPatientRepository, PatientRepository>();
             services.AddTransient<IPolyclinicRepository, PolyclinicRepository>();
-            services.AddTransient<IAppoitmentRepository, AppoitmentRepository>();
+            services.AddTransient<IAppointmentRepository, AppointmentRepository>();
             services.AddTransient<IDoctor, DoctorService>();
             services.AddTransient<IPatient, PatientService>();
             services.AddTransient<IPolyclinic, PolyclinicService>();
-            services.AddTransient<IAppoitment, AppoitmentService>();
+            services.AddTransient<IAppoitment, AppointmentService>();
         }
     }
 }
