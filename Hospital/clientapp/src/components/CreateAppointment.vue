@@ -42,7 +42,7 @@
           <v-col cols="12" sm="4">
             <v-datetime-picker
               label="Traih Seçiniz"
-              v-model="appoitmentDate"
+              v-model="AppointmentDate"
               :date-picker-props="dateProps"
               :time-picker-props="timeProps"
             >
@@ -64,7 +64,7 @@ import ApiService from "@/core/api.service.js";
 import Vue from "vue";
 
 export default {
-  name: "CreateAppoitment",
+  name: "CreateAppointment",
   data() {
     return {
       userId: "",
@@ -72,14 +72,14 @@ export default {
       polyclinics: [],
       doctors: [],
       doctorId: 0,
-      appoitment: {
-        AppoitmentDate: null,
+      Appointment: {
+        AppointmentDate: null,
         IsEmpty: false,
         DoctorId: 0,
         PatientId: 0,
       },
-      appoitments: [],
-      appoitmentDate: new Date(),
+      Appointments: [],
+      AppointmentDate: new Date(),
       dateProps: {
         headerColor: "blue",
         min: new Date().toISOString().substr(0, 10),
@@ -104,8 +104,8 @@ export default {
     allowedHours: (v) => v >= 8 || v < 17,
     allowedStep: (m) => m % 15 === 0,
     submit() {
-      this.createAppoitment();
-      this.$router.push("Appoitments");
+      this.createAppointment();
+      this.$router.push("Appointments");
     },
     getUserId() {
       this.userId = Vue.prototype.$userId;
@@ -130,22 +130,22 @@ export default {
           alert(error);
         });
     },
-    getAppoitments() {
+    getAppointments() {
       ApiService.setHeader();
-      ApiService.get("api/Appoitment")
+      ApiService.get("api/Appointment")
         .then((response) => {
-          this.appoitments = response.data;
+          this.Appointments = response.data;
         })
         .catch(function (error) {
           alert(error);
         });
     },
-    createAppoitment() {
-      (this.appoitment.AppoitmentDate = this.appoitmentDate),
-      (this.appoitment.DoctorId = this.doctorId),
-      (this.appoitment.PatientId = this.userId),
+    createAppointment() {
+      (this.Appointment.AppointmentDate = this.AppointmentDate),
+      (this.Appointment.DoctorId = this.doctorId),
+      (this.Appointment.PatientId = this.userId),
       ApiService.setHeader();
-      ApiService.put("api/Appoitment", this.appoitment).catch(
+      ApiService.put("api/Appointment", this.Appointment).catch(
         ({ response }) => {
           ApiService.showError(response);
         }

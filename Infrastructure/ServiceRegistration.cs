@@ -15,7 +15,7 @@ namespace Hospital.Infrastructure
             services.AddTransient<IDoctor, DoctorService>();
             services.AddTransient<IPatient, PatientService>();
             services.AddTransient<IPolyclinic, PolyclinicService>();
-            services.AddTransient<IAppoitment, AppointmentService>();
+            services.AddTransient<IAppointment, AppointmentService>();
         }
     }
 }

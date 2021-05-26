@@ -68,8 +68,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in appoitments" :key="item.id">
-              <td>{{ item.appoitmentDate }}</td>
+            <tr v-for="item in Appointments" :key="item.id">
+              <td>{{ item.appointmentDate }}</td>
               <td>{{ item.doctorId }}</td>
               <td>{{ item.patientId }}</td>
             </tr>
@@ -90,14 +90,14 @@ export default {
       doctors: [],
       patients: [],
       polyclinics: [],
-      appoitments: []
+      Appointments: []
     };
   },
   created() {
     this.getDoctors();
     this.getPatients();
     this.getPolyclinics();
-    this.getAppoitments();
+    this.getAppointments();
   },
   methods: {
     getDoctors() {
@@ -130,11 +130,11 @@ export default {
           alert(error);
         });
     },
-    getAppoitments() {
+    getAppointments() {
       ApiService.setHeader();
-      ApiService.get("api/Appoitment")
+      ApiService.get("api/Appointment")
         .then((response) => {
-          this.appoitments = response.data;
+          this.Appointments = response.data;
         })
         .catch(function (error) {
           alert(error);

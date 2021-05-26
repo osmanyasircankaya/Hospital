@@ -8,31 +8,31 @@ namespace Hospital.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppoitmentController : ControllerBase
+    public class AppointmentController : ControllerBase
     {
-        private readonly IAppoitment unitOfWork;
+        private readonly IAppointment unitOfWork;
 
-        public AppoitmentController(IAppoitment unitOfWork)
+        public AppointmentController(IAppointment unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = await unitOfWork.Appoitments.GetAllAsync();
+            var data = await unitOfWork.Appointments.GetAllAsync();
             return Ok(data);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var data = await unitOfWork.Appoitments.GetByIdAsync(id);
+            var data = await unitOfWork.Appointments.GetByIdAsync(id);
             if (data == null) return Ok();
             return Ok(data);
         }
         [HttpGet("GetAllByPatientId/{patientId}")]
         public async Task<IActionResult> GetAllByPatientIdAsync(string patientId)
         {
-            var data = await unitOfWork.Appoitments.GetAppointmentsByPatientIdAsync(patientId);
+            var data = await unitOfWork.Appointments.GetAppointmentsByPatientIdAsync(patientId);
             if (data == null) return Ok();
             return Ok(data);
         }
@@ -40,7 +40,7 @@ namespace Hospital.WebApi.Controllers
         [HttpGet("GetSizeByDoctorId/{doctorId}/{day}")]
         public async Task<IActionResult> GetSizeByDoctorId(int doctorId,int day)
         {
-            var data = await unitOfWork.Appoitments.GetAppointmentsSizeByDoctorId(doctorId, _dateTimeParse(day));
+            var data = await unitOfWork.Appointments.GetAppointmentsSizeByDoctorId(doctorId, _dateTimeParse(day));
             return Ok(data);
         }
 
@@ -50,27 +50,27 @@ namespace Hospital.WebApi.Controllers
         
         public async Task<IActionResult> GetSizeByPolId(int polId,int day)
         {
-            var data = await unitOfWork.Appoitments.GetAppoimentsSizeByPolId(polId, _dateTimeParse(day));
+            var data = await unitOfWork.Appointments.GetAppoimentsSizeByPolId(polId, _dateTimeParse(day));
             return Ok(data);
         }
         
         
         [HttpPut]
-        public async Task<IActionResult> Upsert(Appointment Appoitment)
+        public async Task<IActionResult> Upsert(Appointment Appointment)
         {
-            var data = await unitOfWork.Appoitments.UpsertAsync(Appoitment);
+            var data = await unitOfWork.Appointments.UpsertAsync(Appointment);
             return Ok(data);
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await unitOfWork.Appoitments.DeleteAsync(id);
+            var data = await unitOfWork.Appointments.DeleteAsync(id);
             return Ok(data);
         }
-        [HttpDelete("DeleteAppoitmentByPatientId/{patientId}")]
+        [HttpDelete("DeleteAppointmentByPatientId/{patientId}")]
         public async Task<IActionResult> Delete(string patientId)
         {
-            var data = await unitOfWork.Appoitments.DeleteAppointmentByIdAsync(patientId);
+            var data = await unitOfWork.Appointments.DeleteAppointmentByIdAsync(patientId);
             return Ok(data);
         }
 

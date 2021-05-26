@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Hospital.Infrastructure.Repository
 {
-    public class AppointmentService : IAppoitment
+    public class AppointmentService : IAppointment
     {
-        public AppointmentService(IAppointmentRepository AppoitmentRepository)
+        public AppointmentService(IAppointmentRepository AppointmentRepository)
         {
-            Appoitments = AppoitmentRepository;
+            Appointments = AppointmentRepository;
         }
-        public IAppointmentRepository Appoitments { get; }
+        public IAppointmentRepository Appointments { get; }
     }
 }

@@ -3,9 +3,9 @@ import Router from 'vue-router'
 import Home from "@/components/Home.vue";
 import Login from "@/components/Login.vue";
 import Menu from "@/components/Menu.vue";
-import CreateAppoitment from "@/components/CreateAppoitment.vue";
-import Appoitments from "@/components/Appoitments.vue";
-import DeleteAppoitment from "@/components/DeleteAppoitment.vue";
+import CreateAppointment from "@/components/CreateAppointment.vue";
+import Appointments from "@/components/Appointments.vue";
+import DeleteAppointment from "@/components/DeleteAppointment.vue";
 import Statistics from "@/components/Statistics.vue";
 
 Vue.use(Router)
@@ -28,19 +28,19 @@ export default new Router({
       component: Menu,
     },
     {
-      path: "/CreateAppoitment",
-      name: "CreateAppoitment",
-      component: CreateAppoitment,
+      path: "/CreateAppointment",
+      name: "CreateAppointment",
+      component: CreateAppointment,
     },
     {
-      path: "/Appoitments",
-      name: "Appoitments",
-      component: Appoitments,
+      path: "/Appointments",
+      name: "Appointments",
+      component: Appointments,
     },
     {
-      path: "/DeleteAppoitment",
-      name: "DeleteAppoitment",
-      component: DeleteAppoitment,
+      path: "/DeleteAppointment",
+      name: "DeleteAppointment",
+      component: DeleteAppointment,
     },
     {
       path: "/Statistics",

@@ -27,10 +27,10 @@ CREATE TABLE Patient
 	ModifiedOn	datetime NULL
 )
 
-CREATE TABLE Appoitment
+CREATE TABLE Appointment
 (
 	Id		int IDENTITY(0,1) PRIMARY KEY NOT NULL,
-	AppoitmentDate		datetime NOT NULL,
+	AppointmentDate		datetime NOT NULL,
 	IsEmpty 			BIT NOT NULL,
 	DoctorId	int FOREIGN KEY REFERENCES Doctor(Id),
 	PatientId		varchar(255) FOREIGN KEY REFERENCES Patient(Id),

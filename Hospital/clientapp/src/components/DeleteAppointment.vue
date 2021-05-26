@@ -7,9 +7,9 @@
         <v-col cols="12" sm="4">
           <span>RANDEVU SEÇ</span>
           <v-select
-            v-model="appoitmentId"
+            v-model="AppointmentId"
             :item-text="(item) => item.id"
-            :items="appoitments"
+            :items="Appointments"
             label="Randevu"
             class="mt-2"
             solo
@@ -36,11 +36,11 @@ import ApiService from "@/core/api.service.js";
 import Vue from "vue";
 
 export default {
-  name: "CreateAppoitment",
+  name: "CreateAppointment",
   data() {
     return {
-      appoitmentId: 0,
-      appoitments: [],
+      AppointmentId: 0,
+      Appointments: [],
       userId: '',
     };
   },
@@ -49,27 +49,27 @@ export default {
   },
   methods: {
     submit() {
-      this.deleteAppoitment();
-      this.$router.push("Appoitments");
+      this.deleteAppointment();
+      this.$router.push("Appointments");
     },
-    getAppoitments() {
+    getAppointments() {
       ApiService.setHeader();
-      ApiService.get("api/Appoitment/GetAllByPatientId", this.userId)
+      ApiService.get("api/Appointment/GetAllByPatientId", this.userId)
         .then((response) => {
           if(response.data == null){
             alert("randevu yok")
           }
-          this.appoitments = response.data;
+          this.Appointments = response.data;
         })
         .catch(function (error) {
           alert(error);
         });
     },
-    deleteAppoitment() {
+    deleteAppointment() {
       ApiService.setHeader();
-      ApiService.delete("api/Appoitment/DeleteAppoitmentByPatientId/" + this.userId)
+      ApiService.delete("api/Appointment/DeleteAppointmentByPatientId/" + this.userId)
         .then(() => {
-          //this.getAppoitments();
+          //this.getAppointments();
         })
         .catch(function (error) {
           alert(error);
@@ -77,7 +77,7 @@ export default {
     },
     getUserId() {
       this.userId = Vue.prototype.$userId
-      this.getAppoitments();
+      this.getAppointments();
     },
   },
 };

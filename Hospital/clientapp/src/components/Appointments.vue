@@ -14,22 +14,22 @@
 import ApiService from "@/core/api.service.js";
 
 export default {
-  name: "Appoitments",
+  name: "Appointments",
   data() {
     return {
-      appoitmentId: 0,
-      appoitments: [],
+      AppointmentId: 0,
+      Appointments: [],
     };
   },
   created() {
-    this.getAppoitments();
+    this.getAppointments();
   },
   methods: {
-    getAppoitments() {
+    getAppointments() {
       ApiService.setHeader();
-      ApiService.get("api/Appoitment")
+      ApiService.get("api/Appointment")
         .then((response) => {
-          this.appoitments = response.data;
+          this.Appointments = response.data;
         })
         .catch(function (error) {
           alert(error);
