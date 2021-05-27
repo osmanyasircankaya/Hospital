@@ -16,7 +16,7 @@ https://social.technet.microsoft.com/wiki/contents/articles/30877.t-sql-extendin
 * Seçilen dönemlerde alınan randevu sayıları bölümlere göre pasta grafiği ile gösterilebilir.
 * Hastaların randevu alma sıklığıyla ilgili bir istatistik tutulabilir.
 * 10'a tamamlanacak
-	- Anlık olarak alınmış toplam randevu sayısı
+	- Anlık olarak o zamana kadar alınmış toplam randevu sayısı
 	- Poliklinik başına randevu sayısı
 	- Seçilen doktordan alınmış randevu sayısı
 	- En çok randevu alınmış gün
@@ -45,9 +45,9 @@ Backend ile ilgili yapılacaklar
 * Proje çalıştırıldığında yeni veritabanı oluşturulacak, tablolar oluşturulacak ve örnek veriler insert edilecek.
 * Procedure ve triggerlar belirlenecek. 
 	Trigger 1 - Randevu alındığında doktora mail atılacak.
-	Trigger 2 - Randevu alındığında ilgili randevunun dolu biti 1 yapılacak.
+	xx Trigger 2 - Randevu alındığında ilgili randevunun dolu biti 1 yapılacak.
 	Trigger 3 - Randevu iptal edildiğinde doktora mail atılacak.
-	Trigger 4 - Randevu iptal edildiğinde ilgili randevunun dolu biti 0 yapılacak.
+	xx Trigger 4 - Randevu iptal edildiğinde ilgili randevunun dolu biti 0 yapılacak.
 	(Opsiyonel) Trigger 5 - Eğer randevu sayacı/istatistiği diye bir tablo oluşturulursa alınan randevunun özelliklerine göre 
 							sayaç artabilir. Bu istatistik sorgulamayı kolaylaştırır ancak Serpil hocanın istediği karmaşık sorguları engeller.
 
