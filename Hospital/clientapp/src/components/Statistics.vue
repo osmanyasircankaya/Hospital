@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>İSTATİSTİKLER</h1>
+    <h1 class="mb-5" style="color: #FFFFFF">İSTATİSTİKLER</h1>
     <div class="d-flex justify-content-center mt-5 mb-5">
       <v-simple-table>
         <template v-slot:default>

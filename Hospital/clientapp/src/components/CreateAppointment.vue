@@ -1,8 +1,20 @@
 <template>
   <v-app style="background-image: url(background.png); background-size: cover">
-    <h1>RANDEVU AL</h1>
+    <h1 class="mb-5" style="color: #ffffff">RANDEVU AL</h1>
     <v-form>
       <v-container fill-height>
+        <v-row justify="center" align="center">
+          <v-col cols="12" sm="4">
+            <v-text-field
+              v-model="Patient.Id"
+              :rules="rules"
+              minlength="11"
+              solo
+              label="Kimlik Numarası"
+              v-mask="mask"
+            ></v-text-field>
+          </v-col>
+        </v-row>
         <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
             <v-select
@@ -21,9 +33,11 @@
               }}</template></v-select
             >
           </v-col>
+        </v-row>
+        <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
             <v-select
-              v-model="doctorId"
+              v-model="Appointment.DoctorId"
               :item-text="(item) => item.id"
               :items="doctors"
               label="Doktor"
@@ -41,8 +55,9 @@
         <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
             <v-datetime-picker
+              
               label="Traih Seçiniz"
-              v-model="AppointmentDate"
+              v-model="Appointment.AppointmentDate"
               :date-picker-props="dateProps"
               :time-picker-props="timeProps"
             >
@@ -52,8 +67,8 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-btn class="mr-4" color="primary" type="submit" @click="submit()">
-        submit
+      <v-btn class="mr-4" color="success" type="submit" @click="submit()">
+        RANDEVU AL
       </v-btn>
     </v-form>
   </v-app>
@@ -61,25 +76,24 @@
 
 <script>
 import ApiService from "@/core/api.service.js";
-import Vue from "vue";
 
 export default {
   name: "CreateAppointment",
   data() {
     return {
-      userId: "",
       polId: 0,
       polyclinics: [],
       doctors: [],
-      doctorId: 0,
       Appointment: {
         AppointmentDate: null,
         IsEmpty: false,
         DoctorId: 0,
-        PatientId: 0,
+        PatientId: "",
+      },
+      Patient: {
+        Id: "",
       },
       Appointments: [],
-      AppointmentDate: new Date(),
       dateProps: {
         headerColor: "blue",
         min: new Date().toISOString().substr(0, 10),
@@ -92,24 +106,46 @@ export default {
         allowedMinutes: this.allowedStep,
         format: "24hr",
         min: "9:00",
-        max: "17:00",
+        max: "16:45",
       },
+      mask: [
+        /[1-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+      ],
+      rules: [
+        (v) => v.length === 11 || "Kimlik numarası 11 karakterli olmalı !",
+      ],
     };
   },
   created() {
     this.getPolyclinics();
-    this.getUserId();
   },
   methods: {
-    allowedHours: (v) => v >= 8 || v < 17,
+    allowedHours: (v) => v >= 8 || v <= 16,
+
     allowedStep: (m) => m % 15 === 0,
+
     submit() {
-      this.createAppointment();
-      this.$router.push("Appointments");
+      if (this.Patient.Id.length === 11) {
+        this.createPatient();
+        setTimeout(() => {
+          this.createAppointment();
+        }, 1000);
+        this.$router.push("Menu");
+      } else {
+        alert("Kimlik numarası 11 haneli olmak zorunda");
+      }
     },
-    getUserId() {
-      this.userId = Vue.prototype.$userId;
-    },
+
     getPolyclinics() {
       ApiService.setHeader();
       ApiService.get("api/Polyclinic")
@@ -120,6 +156,7 @@ export default {
           alert(error);
         });
     },
+
     getDoctors() {
       ApiService.setHeader();
       ApiService.get("api/Doctor/GetAllByPolId", this.polId)
@@ -130,6 +167,7 @@ export default {
           alert(error);
         });
     },
+
     getAppointments() {
       ApiService.setHeader();
       ApiService.get("api/Appointment")
@@ -140,11 +178,16 @@ export default {
           alert(error);
         });
     },
-    createAppointment() {
-      (this.Appointment.AppointmentDate = this.AppointmentDate),
-      (this.Appointment.DoctorId = this.doctorId),
-      (this.Appointment.PatientId = this.userId),
+
+    createPatient() {
       ApiService.setHeader();
+      ApiService.put("api/Patient", this.Patient).catch(({ response }) => {
+        ApiService.showError(response);
+      });
+    },
+
+    createAppointment() {
+      (this.Appointment.PatientId = this.Patient.Id), ApiService.setHeader();
       ApiService.put("api/Appointment", this.Appointment).catch(
         ({ response }) => {
           ApiService.showError(response);

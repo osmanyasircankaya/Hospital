@@ -1,13 +1,30 @@
 <template>
   <v-app style="background-image: url(background.png); background-size: cover">
-    <h1>RANDEVU İPTAL ET</h1>
+    <h1 class="mb-5" style="color: #ffffff">RANDEVU İPTAL ET</h1>
     <v-form>
-    <v-container fill-height>
-      <v-row justify="center" align="center">
+      <v-container fill-height>
+        <v-row justify="center" align="center">
+          <v-col cols="12" sm="4">
+            <v-text-field
+              v-model="Patient.Id"
+              :rules="rules"
+              minlength="11"
+              solo
+              label="Kimlik Numarası"
+              v-mask="mask"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-btn color="outline-light" type="submit" @click="getAppointments()">
+        RANDEVULARI GETİR
+      </v-btn>
+    </v-form>
+    <v-form v-if="Appointments.length != 0">
+      <v-row class="mt-8" justify="center" align="center">
         <v-col cols="12" sm="4">
-          <span>RANDEVU SEÇ</span>
+          <h5 class="mt-3" style="color: #ffffff">RANDEVU SEÇ</h5>
           <v-select
-            v-model="AppointmentId"
             :item-text="(item) => item.id"
             :items="Appointments"
             label="Randevu"
@@ -23,9 +40,8 @@
           >
         </v-col>
       </v-row>
-    </v-container>
-    <v-btn class="mr-4" color="primary" type="submit" @click="submit()">
-        İPTAL ET
+      <v-btn class="mt-2" color="outline-light" type="submit" @click="submit()">
+        RANDEVUYU İPTAL ET
       </v-btn>
     </v-form>
   </v-app>
@@ -33,31 +49,49 @@
 
 <script>
 import ApiService from "@/core/api.service.js";
-import Vue from "vue";
 
 export default {
   name: "CreateAppointment",
   data() {
     return {
-      AppointmentId: 0,
       Appointments: [],
-      userId: '',
+      Patient: {
+        Id: "",
+      },
+      mask: [
+        /[1-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+        /[0-9]/,
+      ],
+      rules: [
+        (v) => v.length === 11 || "Kimlik numarası 11 karakterli olmalı !",
+      ],
     };
   },
-  created() {
-    this.getUserId();
-  },
+  created() {},
   methods: {
     submit() {
-      this.deleteAppointment();
-      this.$router.push("Appointments");
+      if (this.Patient.Id.length === 11) {
+        this.deleteAppointment();
+        this.$router.push("Menu");
+      } else {
+        alert("Kimlik numarası 11 haneli olmak zorunda");
+      }
     },
     getAppointments() {
       ApiService.setHeader();
-      ApiService.get("api/Appointment/GetAllByPatientId", this.userId)
+      ApiService.get("api/Appointment/GetAllByPatientId", this.Patient.Id)
         .then((response) => {
-          if(response.data == null){
-            alert("randevu yok")
+          if (response.data.length === 0) {
+            alert("Bu kimlik numarasına ait randevu bulunamadı.");
           }
           this.Appointments = response.data;
         })
@@ -67,17 +101,11 @@ export default {
     },
     deleteAppointment() {
       ApiService.setHeader();
-      ApiService.delete("api/Appointment/DeleteAppointmentByPatientId/" + this.userId)
-        .then(() => {
-          //this.getAppointments();
-        })
-        .catch(function (error) {
-          alert(error);
-        });
-    },
-    getUserId() {
-      this.userId = Vue.prototype.$userId
-      this.getAppointments();
+      ApiService.delete(
+        "api/Appointment/DeleteAppointmentByPatientId/" + this.Patient.Id
+      ).catch(function (error) {
+        alert(error);
+      });
     },
   },
 };

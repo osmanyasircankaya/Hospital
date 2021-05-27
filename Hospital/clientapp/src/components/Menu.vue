@@ -1,23 +1,18 @@
 <template>
   <div clas="d-flex justify-content-center">
-    <h1>MENÜ</h1>
+    <h1 class="mb-5" style="color: #FFFFFF">MENÜ</h1>
     <div>
-      <b-button class="mt-5" to="/CreateAppointment" variant="primary" size="lg"
+      <b-button class="mt-5" to="/CreateAppointment" variant="outline-light" size="lg"
         >Randevu Al</b-button
       >
     </div>
     <div>
-      <b-button class="mt-5" to="/Appointments" variant="primary" size="lg"
-        >Randevularım</b-button
-      >
-    </div>
-    <div>
-      <b-button class="mt-5" to="/DeleteAppointment" variant="primary" size="lg"
+      <b-button class="mt-5" to="/DeleteAppointment" variant="outline-light" size="lg"
         >Randevunu İptal Et</b-button
       >
     </div>
     <div>
-      <b-button class="mt-5" to="/Statistics" variant="primary" size="lg"
+      <b-button class="mt-5" to="/Statistics" variant="outline-light" size="lg"
         >İstatistikler</b-button
       >
     </div>

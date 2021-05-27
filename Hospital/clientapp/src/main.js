@@ -25,8 +25,6 @@ Vue.use(DatetimePicker)
 
 Vue.use(VueMask)
 
-Vue.prototype.$userId = '' 
-
 new Vue({
   router,
   vuetify,
