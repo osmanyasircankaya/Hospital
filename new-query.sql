@@ -50,7 +50,7 @@ VALUES
 (3, 'Kemal', 'Baycan', 2,'2016-12-21 00:00:00.000', NULL),
 (4, 'Yaren', 'Atan', 2, '2016-12-21 00:00:00.000', NULL)
 
-INSERT INTO Patient
+INSERT INTO Patient	
 VALUES
 ('52621459889', '2016-12-21 00:00:00.000', NULL),
 ('94367459231', '2016-12-21 00:00:00.000', NULL),
@@ -61,3 +61,35 @@ VALUES
 CREATE PROC GetAllAppointment
 AS 
 Select count(*) from Appointment;
+
+
+
+CREATE PROCEDURE getLastMail
+AS
+SELECT TOP 1 Patient.Mail FROM Patient INNER JOIN Appointment ON Patient.Id = Appointment.PatientId ORDER BY Appointment.AddedOn DESC
+GO
+
+CREATE PROCEDURE getLastDate
+AS
+SELECT TOP 1 Appointment.AppointmentDate FROM Appointment ORDER BY Appointment.AddedOn DESC
+GO
+
+CREATE TRIGGER SendAppMail
+ON dbo.Appointment
+FOR INSERT
+AS 
+BEGIN
+	DECLARE @LastMail varchar(255)
+	EXEC @LastMail = getLastMail
+	DECLARE @LastDate varchar(255)
+	EXEC @LastDate = getLastDate
+	SET NOCOUNT ON
+    BEGIN
+        EXEC msdb.dbo.sp_send_dbmail
+          @recipients = @LastMail, 
+          @profile_name = 'HospitalMail',
+          @subject = 'New Appointment', 
+          @body = 'Your appointment saved. Appointment date is ' -- Düzeltilecek.
+    END
+END
+GO
