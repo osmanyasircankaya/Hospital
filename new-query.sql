@@ -64,7 +64,7 @@ Select count(*) from Appointment;
 
 
 
-CREATE PROCEDURE getLastMail
+/* CREATE PROCEDURE getLastMail
 AS
 SELECT TOP 1 Patient.Mail FROM Patient INNER JOIN Appointment ON Patient.Id = Appointment.PatientId ORDER BY Appointment.AddedOn DESC
 GO
@@ -89,7 +89,27 @@ BEGIN
           @recipients = @LastMail, 
           @profile_name = 'HospitalMail',
           @subject = 'New Appointment', 
-          @body = 'Your appointment saved. Appointment date is ' -- Düzeltilecek.
+          @body = 'Your appointment saved. Appointment date is ' -- DÃ¼zeltilecek.
     END
 END
-GO
+GO */
+
+Without Procedures
+
+CREATE TRIGGER SendAppMail
+ON Appointment
+AFTER INSERT
+AS 
+BEGIN
+SET NOCOUNT ON;
+	DECLARE @LastMail varchar(255)
+	Select TOP 1 @LastMail=Patient.Mail FROM Patient INNER JOIN Appointment ON Patient.Id = Appointment.PatientId ORDER BY Appointment.AddedOn DESC
+	DECLARE @LastDate varchar(255)
+	SELECT TOP 1 @LastDate=Appointment.AppointmentDate FROM Appointment ORDER BY Appointment.AddedOn DESC
+	DECLARE @body varchar(255)= 'Your appointment saved. Appointment date is ' + @LastDate
+       EXEC msdb.dbo.sp_send_dbmail
+          @recipients = @LastMail, 
+          @profile_name = 'HospitalMail',
+          @subject = 'New Appointment', 
+          @body =@body
+END
