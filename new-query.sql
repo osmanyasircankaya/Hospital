@@ -57,3 +57,7 @@ VALUES
 ('49412459247', '2016-12-21 00:00:00.000', NULL),
 ('23621156863', '2016-12-21 00:00:00.000', NULL),
 ('34526732824', '2016-12-21 00:00:00.000', NULL)
+
+CREATE PROC GetAllAppointment
+AS 
+Select count(*) from Appointment;
