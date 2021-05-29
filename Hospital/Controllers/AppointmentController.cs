@@ -29,6 +29,20 @@ namespace Hospital.WebApi.Controllers
             if (data == null) return Ok();
             return Ok(data);
         }
+        [HttpGet("GetMinimumDay")]
+        public async Task<IActionResult> GetMinimumByDate()
+        {
+            var data = await unitOfWork.Appointments.GetMinimumAppointmentDay();
+            if (data == null) return Ok();
+            return Ok(data);
+        }
+        [HttpGet("GetMaximumDate")]
+        public async Task<IActionResult> GetMaximumByDate()
+        {
+            var data = await unitOfWork.Appointments.GetMaximumAppointmentDay();
+            if (data == null) return Ok();
+            return Ok(data);
+        }
         [HttpGet("GetAllByPatientId/{patientId}")]
         public async Task<IActionResult> GetAllByPatientIdAsync(string patientId)
         {
@@ -51,6 +65,12 @@ namespace Hospital.WebApi.Controllers
         public async Task<IActionResult> GetSizeByPolId(int polId,int day)
         {
             var data = await unitOfWork.Appointments.GetAppoimentsSizeByPolId(polId, _dateTimeParse(day));
+            return Ok(data);
+        }
+        [HttpGet("GetAllSortedByDate")]
+        public async Task<IActionResult> GetAllSortedByDate()
+        {
+            var data = await unitOfWork.Appointments.GetAppointmentsCountOrderByDate();
             return Ok(data);
         }
         

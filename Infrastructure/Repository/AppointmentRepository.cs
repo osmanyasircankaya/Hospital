@@ -4,6 +4,7 @@ using Hospital.Core.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -116,5 +117,38 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
+        public async Task<List<dynamic>> GetAppointmentsCountOrderByDate()
+        {
+            var sql = "Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate) Order By AppointmentCount Desc";
+            using (var connection= new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                List<dynamic> result = (await connection.QueryAsync(sql)).ToList();
+
+                return result;
+            }
+           
+        }
+
+        public async Task<dynamic> GetMinimumAppointmentDay()
+        {
+            var sql = "Select TOP 1 * from  ( Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate))As EnDusukGun";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                dynamic result = await connection.QueryFirstAsync(sql);
+
+                return result;
+            }
+        }
+
+        public async Task<dynamic> GetMaximumAppointmentDay()
+        {
+            var sql = "Select TOP 1 * from  ( Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate))As EnYuksekGun Order By AppointmentCount DESC";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                var result = await connection.QueryFirstAsync(sql);
+
+                return result;
+            }
+        }
     }
 }

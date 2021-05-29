@@ -11,5 +11,8 @@ namespace Hospital.Application.Interfaces
         Task<int> DeleteAppointmentByIdAsync(string patientId);
         Task<int> GetAppointmentsSizeByDoctorId(int doctorId,string date=null);
         Task<int> GetAppoimentsSizeByPolId(int polId, string date=null);
+        Task<List<dynamic>> GetAppointmentsCountOrderByDate();
+        Task<dynamic> GetMinimumAppointmentDay();
+        Task<dynamic> GetMaximumAppointmentDay();
     }
 }
