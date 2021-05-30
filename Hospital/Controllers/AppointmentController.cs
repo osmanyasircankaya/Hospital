@@ -50,7 +50,17 @@ namespace Hospital.WebApi.Controllers
             if (data == null) return Ok();
             return Ok(data);
         }
-        //Doktorların belirli günler aralığındaki randevuları
+        [HttpGet("GetOfPatientsDetailByDataRange/{patientId}/{day}")]
+        
+        //Hastanın belirli tarih aralığındaki randevularına ait bilgileri içeren metod. Son 30 günkü randevuları almak için day parametresine 30 verirseniz. Bugün ve 30 gün öncesi arasındaki verileri getirir.
+        public async Task<IActionResult> GetOfPatientsDetailByDataRange(string patientId,int day)
+        {
+            var data = await unitOfWork.Appointments.GetAppointmentsDetailByDateRange(patientId, _dateTimeParse(day));
+            if (data == null) return Ok();
+            return Ok(data);
+        }
+
+        //Doktorların belirli günler aralığındaki randevu sayısını getirir. Son 30 günkü randevu sayısını almak için day parametresine 30 verirseniz. Bugün ve 30 gün öncesi arasındaki verileri getirir.
         [HttpGet("GetSizeByDoctorId/{doctorId}/{day}")]
         public async Task<IActionResult> GetSizeByDoctorId(int doctorId,int day)
         {

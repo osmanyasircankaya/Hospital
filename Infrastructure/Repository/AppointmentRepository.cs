@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -93,11 +94,9 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<int> GetAppointmentsSizeByDoctorId(int doctorId,string date=null)
+        public async Task<int> GetAppointmentsSizeByDoctorId(int doctorId,string date)
         {
-            var defaultSql = "Select count(*) from Appointment where doctorId=@doctorId";
-            var adding = defaultSql+$"and AppointmentDate Between '{date}' and GETDATE()";
-            var sql = date == null ? defaultSql : adding;
+            var sql = $"Select count(*) from Appointment where doctorId=@doctorId and AppointmentDate Between '{date}' and GETDATE() ";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -106,7 +105,7 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<int> GetAppoimentsSizeByPolId(int polId, string date=null)
+        public async Task<int> GetAppoimentsSizeByPolId(int polId, string date)
         {
             var sql= $"Select count(*) from Appointment where polId=@polId and AppointmentDate Between '{date}' and GETDATE()";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
@@ -152,6 +151,22 @@ namespace Hospital.Infrastructure.Repository
 
                 return result;
             }
+        }
+
+        public async Task<List<dynamic>> GetAppointmentsDetailByDateRange(string patientId, string startingTime)
+        {
+            var sql = "GetAppointmentsDetailByDateRange ";
+
+                 using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var values = new { PatientId = patientId, StartingTime=startingTime };
+                List<dynamic> result = (await connection.QueryAsync(sql,values,commandType:CommandType.StoredProcedure)).ToList();
+
+                return result;
+            }
+
+            //var results = connection.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
         }
     }
 }
