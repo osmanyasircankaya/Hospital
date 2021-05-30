@@ -7,5 +7,6 @@ namespace Hospital.Application.Interfaces
     public interface IDoctorRepository : IGenericRepository<Doctor>
     {
          Task<IReadOnlyList<Doctor>> GetDoctorsByPolIdAsync(int polId);
+        Task<List<dynamic>> GetDoctorsOrderByAppointmentCount();
     }
 }

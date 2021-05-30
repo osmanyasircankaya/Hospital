@@ -63,6 +63,17 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
+        public async Task<List<dynamic>> GetDoctorsOrderByAppointmentCount()
+        {
+            var sql = "Select Doctor.FirstName + ' ' + Doctor.LastName as FullName,count(Appointment.DoctorId) as AppointmentCount from Doctor left join Appointment ON Doctor.Id=Appointment.DoctorId Group By Doctor.FirstName + ' ' +Doctor.LastName Order By AppointmentCount DESC";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync(sql);
+                return result.ToList();
+            }
+        }
+
         public async Task<int> UpsertAsync(Doctor entity)
         {
             entity.AddedOn = DateTime.Now;

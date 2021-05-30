@@ -21,6 +21,13 @@ namespace Hospital.WebApi.Controllers
             var data = await unitOfWork.Doctors.GetAllAsync();
             return Ok(data);
         }
+        [HttpGet("GetAllOrderByAppointmentCount")]
+        public async Task<IActionResult> GetAllOrderByAppointmentCount()
+        {
+            var data = await unitOfWork.Doctors.GetDoctorsOrderByAppointmentCount();
+            if(data==null) return Ok();
+            return Ok(data);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

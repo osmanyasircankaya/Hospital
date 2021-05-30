@@ -122,6 +122,7 @@ namespace Hospital.Infrastructure.Repository
             var sql = "Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate) Order By AppointmentCount Desc";
             using (var connection= new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
+                connection.Open();
                 List<dynamic> result = (await connection.QueryAsync(sql)).ToList();
 
                 return result;
@@ -134,6 +135,7 @@ namespace Hospital.Infrastructure.Repository
             var sql = "Select TOP 1 * from  ( Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate))As EnDusukGun";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
+                connection.Open();
                 dynamic result = await connection.QueryFirstAsync(sql);
 
                 return result;
@@ -145,6 +147,7 @@ namespace Hospital.Infrastructure.Repository
             var sql = "Select TOP 1 * from  ( Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate))As EnYuksekGun Order By AppointmentCount DESC";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
+                connection.Open();
                 var result = await connection.QueryFirstAsync(sql);
 
                 return result;
