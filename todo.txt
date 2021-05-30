@@ -21,7 +21,7 @@ https://social.technet.microsoft.com/wiki/contents/articles/30877.t-sql-extendin
 	- Seçilen doktordan alınmış randevu sayısı
 	- En çok randevu alınmış gün -- Tamamlandı
 	- En az randevu alınmış gün -- Tamamlandı
-	- En çok randevu alnımış doktor
+	- En çok randevu alnımış doktor -- Tüm doktorları randevu sayılarına göre sıralı şekilde getiren bir liste apisi yazıldı, şimdilik.
 	- En az randevu alınmış doktor
 	- En çok randevu alınmış poliklinik
 	- En az randevu alınmış poliklinik
