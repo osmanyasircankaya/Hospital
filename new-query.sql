@@ -119,5 +119,5 @@ END
 
 Create Procedure GetAppointmentsDetailByDateRange @PatientId varchar(11), @StartingTime DateTime
 AS
-Select AppointmentDate, Doctor.FirstName+' ' +Doctor.LastName as FullName,Polyclinic.Name from Appointment,Doctor,Polyclinic 
+Select AppointmentDate, Doctor.FirstName+' ' +Doctor.LastName as DoctorName,Polyclinic.Name as PolyclinicName from Appointment,Doctor,Polyclinic 
 where Appointment.PatientId=@PatientId and Appointment.DoctorId=Doctor.Id and Polyclinic.Id=Doctor.PolId and Appointment.AddedOn Between @StartingTime and GETDATE();
