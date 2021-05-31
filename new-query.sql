@@ -173,5 +173,13 @@ AS
 					@body =@body
 			SET @Count += 1
 		END
+		
+		
+--Çoktan aza randevu alınan poliklinikler
+CREATE PROCEDURE FindAppointmentCountWithPolyclinicName
+AS
+SELECT Polyclinic.Name, Count(*) AS 'AppointmentCount' FROM Appointment
+INNER JOIN Doctor ON Doctor.Id=Appointment.DoctorId
+INNER JOIN Polyclinic ON Polyclinic.Id=Doctor.PolId group by Polyclinic.Name Order By 'AppointmentCount' DESC
 
 
