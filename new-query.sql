@@ -188,4 +188,11 @@ AS
 SELECT DATENAME(weekday,AppointmentDate) as 'GUN',Count(AppointmentDate) as 'AppointmentCount' 
 From Appointment Group by DATENAME(weekday,AppointmentDate) Order By AppointmentCount DESC;
 
+-- Belirtilen saat aralığındaki randevu sayılarını saate göre gruplar ve randevu sayılarına göre büyükten küçüğe sıralar
+CREATE PROCEDURE FindAppointmentCountWithHour @StartTime int, @EndTime int
+AS
+SELECT DATEPART(HOUR,AppointmentDate) as HOURS, Count(*) as AppointmentCount from Appointment 
+WHERE DATEPART(HOUR,AppointmentDate) BETWEEN @StartTime AND @EndTime Group By DATEPART(HOUR,AppointmentDate) 
+Order By AppointmentCount DESC
+
 
