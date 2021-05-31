@@ -182,4 +182,10 @@ SELECT Polyclinic.Name, Count(*) AS 'AppointmentCount' FROM Appointment
 INNER JOIN Doctor ON Doctor.Id=Appointment.DoctorId
 INNER JOIN Polyclinic ON Polyclinic.Id=Doctor.PolId group by Polyclinic.Name Order By 'AppointmentCount' DESC
 
+-- Randevu sayısına göre günleri sıralama
+CREATE PROCEDURE FindWeekDayWithAppointmentCount
+AS
+SELECT DATENAME(weekday,AppointmentDate) as 'GUN',Count(AppointmentDate) as 'AppointmentCount' 
+From Appointment Group by DATENAME(weekday,AppointmentDate) Order By AppointmentCount DESC;
+
 
