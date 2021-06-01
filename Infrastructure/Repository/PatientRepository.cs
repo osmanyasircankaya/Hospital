@@ -26,7 +26,7 @@ namespace Hospital.Infrastructure.Repository
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.ExecuteAsync(sql, new { Id = id }, commandType: CommandType.StoredProcedure.);
+                var result = await connection.ExecuteAsync(sql, new { Id = id }, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
