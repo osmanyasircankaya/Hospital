@@ -4,6 +4,7 @@ using Hospital.Core.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -21,11 +22,11 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<int> DeleteAsync(int id)
         {
-            var sql = "DELETE FROM Patient WHERE Id = @Id";
+            var sql = "DeletePatient";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.ExecuteAsync(sql, new { Id = id });
+                var result = await connection.ExecuteAsync(sql, new { Id = id }, commandType: CommandType.StoredProcedure.);
                 return result;
             }
         }
@@ -53,11 +54,11 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<Patient> GetPatientByIdAsync(string id)
         {
-            var sql = "SELECT * FROM Patient WHERE Id = @Id";
+            var sql = "GetPatientById";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QuerySingleOrDefaultAsync<Patient>(sql, new { Id = id });
+                var result = await connection.QuerySingleOrDefaultAsync<Patient>(sql, new { Id = id },commandType:CommandType.StoredProcedure);
                 return result;
             }
         }

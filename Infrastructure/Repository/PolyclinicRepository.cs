@@ -22,11 +22,11 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<int> DeleteAsync(int id)
         {
-            var sql = "DELETE FROM Polyclinic WHERE Id = @Id";
+            var sql = "DeletePolyclinic";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.ExecuteAsync(sql, new { Id = id });
+                var result = await connection.ExecuteAsync(sql, new { Id = id },commandType:CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -44,11 +44,11 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<Polyclinic> GetByIdAsync(int id)
         {
-            var sql = "SELECT * FROM Polyclinic WHERE Id = @Id";
+            var sql = "GetPolyclinicById";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QuerySingleOrDefaultAsync<Polyclinic>(sql, new { Id = id });
+                var result = await connection.QuerySingleOrDefaultAsync<Polyclinic>(sql, new { Id = id },commandType:CommandType.StoredProcedure);
                 return result;
             }
         }

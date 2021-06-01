@@ -21,11 +21,11 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<int> DeleteAsync(int id)
         {
-            var sql = "DELETE FROM Doctor WHERE Id = @Id";
+            var sql = "DeleteDoctor";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.ExecuteAsync(sql, new { Id = id });
+                var result = await connection.ExecuteAsync(sql, new { Id = id },commandType:System.Data.CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -43,22 +43,22 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<Doctor> GetByIdAsync(int id)
         {
-            var sql = "SELECT * FROM Doctor WHERE Id = @Id";
+            var sql = "GetDoctorById";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QuerySingleOrDefaultAsync<Doctor>(sql, new { Id = id });
+                var result = await connection.QuerySingleOrDefaultAsync<Doctor>(sql, new { Id = id },commandType:System.Data.CommandType.StoredProcedure);
                 return result;
             }
         }
 
         public async Task<IReadOnlyList<Doctor>> GetDoctorsByPolIdAsync(int polId)
         {
-            var sql = "SELECT * FROM Doctor Where PolId=@PolId";
+            var sql = "GetDoctorsByPolId";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Doctor>(sql, new { PolId = polId });
+                var result = await connection.QueryAsync<Doctor>(sql, new { PolId = polId },commandType:System.Data.CommandType.StoredProcedure);
                 return result.ToList();
             }
         }

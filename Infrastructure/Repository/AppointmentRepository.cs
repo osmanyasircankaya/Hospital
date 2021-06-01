@@ -33,22 +33,22 @@ namespace Hospital.Infrastructure.Repository
 
         public async Task<int> DeleteAsync(int id)
         {
-            var sql = "DELETE FROM Appointment WHERE Id = @Id";
+            var sql = "DeleteAppointment";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.ExecuteAsync(sql, new { Id = id });
+                var result = await connection.ExecuteAsync(sql, new { Id = id },commandType:CommandType.StoredProcedure);
                 return result;
             }
         }
 
         public async Task<IReadOnlyList<Appointment>> GetAppointmentsByPatientIdAsync(string patientId)
         {
-            var sql = "SELECT * FROM Appointment WHERE PatientId = @patientId";
+            var sql = "GetAppointmentsByPatientId";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Appointment>(sql, new { PatientId = patientId });
+                var result = await connection.QueryAsync<Appointment>(sql, new { PatientId = patientId },commandType:CommandType.StoredProcedure);
                 return result.ToList();
             }
         }
@@ -70,7 +70,7 @@ namespace Hospital.Infrastructure.Repository
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QuerySingleOrDefaultAsync<Appointment>(sql, new { PatientId = id });
+                var result = await connection.QuerySingleOrDefaultAsync<Appointment>(sql, new { Id = id },commandType:CommandType.StoredProcedure);
                 return result;
             }
         }
