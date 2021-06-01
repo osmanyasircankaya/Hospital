@@ -15,5 +15,7 @@ namespace Hospital.Application.Interfaces
         Task<dynamic> GetMinimumAppointmentDay();
         Task<dynamic> GetMaximumAppointmentDay();
         Task<List<dynamic>> GetAppointmentsDetailByDateRange(string patientId, string startingTime);
+        Task<List<dynamic>> GetAppointmentCountByHours(int startHour,int endHour);
+        Task<List<dynamic>> GetWeekDayByAppointmentCount();
     }
 }

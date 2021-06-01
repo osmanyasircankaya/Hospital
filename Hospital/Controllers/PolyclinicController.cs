@@ -40,5 +40,12 @@ namespace Hospital.WebApi.Controllers
             var data = await unitOfWork.Polyclinics.DeleteAsync(id);
             return Ok(data);
         }
+        [HttpGet("GetPolyclinicByAppointmentCount")]
+        public async Task<IActionResult> GetByAppointmentCount()
+        {
+            var data = await unitOfWork.Polyclinics.GetPolyclinicByAppointmentCount();
+            if (data == null) return Ok();
+            return Ok(data);
+        }
     }
 }

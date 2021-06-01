@@ -53,7 +53,7 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<IReadOnlyList<Appointment>> GetAllAsync(string sqlCommand=null)
+        public async Task<IReadOnlyList<Appointment>> GetAllAsync(string sqlCommand = null)
         {
             var sql = "SELECT * FROM Appointment";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
@@ -94,20 +94,20 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
-        public async Task<int> GetAppointmentsSizeByDoctorId(int doctorId,string date)
+        public async Task<int> GetAppointmentsSizeByDoctorId(int doctorId, string date)
         {
             var sql = $"Select count(*) from Appointment where doctorId=@doctorId and AppointmentDate Between '{date}' and GETDATE() ";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<int>(sql,new {doctorId=doctorId });
+                var result = await connection.QueryAsync<int>(sql, new { doctorId = doctorId });
                 return result.First();
             }
         }
 
         public async Task<int> GetAppoimentsSizeByPolId(int polId, string date)
         {
-            var sql= $"Select count(*) from Appointment where polId=@polId and AppointmentDate Between '{date}' and GETDATE()";
+            var sql = $"Select count(*) from Appointment where polId=@polId and AppointmentDate Between '{date}' and GETDATE()";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -119,14 +119,14 @@ namespace Hospital.Infrastructure.Repository
         public async Task<List<dynamic>> GetAppointmentsCountOrderByDate()
         {
             var sql = "Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate) Order By AppointmentCount Desc";
-            using (var connection= new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 List<dynamic> result = (await connection.QueryAsync(sql)).ToList();
 
                 return result;
             }
-           
+
         }
 
         public async Task<dynamic> GetMinimumAppointmentDay()
@@ -157,16 +157,42 @@ namespace Hospital.Infrastructure.Repository
         {
             var sql = "GetAppointmentsDetailByDateRange ";
 
-                 using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var values = new { PatientId = patientId, StartingTime=startingTime };
-                List<dynamic> result = (await connection.QueryAsync(sql,values,commandType:CommandType.StoredProcedure)).ToList();
+                var values = new { PatientId = patientId, StartingTime = startingTime };
+                List<dynamic> result = (await connection.QueryAsync(sql, values, commandType: CommandType.StoredProcedure)).ToList();
 
                 return result;
             }
 
             //var results = connection.Query(procedure, values, commandType: CommandType.StoredProcedure).ToList();
+        }
+
+        public async Task<List<dynamic>> GetAppointmentCountByHours(int startHour, int endHour)
+        {
+            var sql = "FindAppointmentCountWithHour";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var values = new { StartTime = startHour, EndTime = endHour };
+                List<dynamic> result = (await connection.QueryAsync(sql, values, commandType: CommandType.StoredProcedure)).ToList();
+
+                return result;
+            }
+        }
+
+        public async Task<List<dynamic>> GetWeekDayByAppointmentCount()
+        {
+            var sql = "FindWeekDayWithAppointmentCount";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+
+                List<dynamic> result = (await connection.QueryAsync(sql, commandType: CommandType.StoredProcedure)).ToList();
+
+                return result;
+            }
         }
     }
 }

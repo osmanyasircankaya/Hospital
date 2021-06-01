@@ -4,6 +4,7 @@ using Hospital.Core.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -52,6 +53,19 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
+        public async Task<List<dynamic>> GetPolyclinicByAppointmentCount()
+        {
+            var sql = "FindAppointmentCountWithPolyclinicName";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+
+                List<dynamic> result = (await connection.QueryAsync(sql, commandType: CommandType.StoredProcedure)).ToList();
+
+                return result;
+            }
+        }
+
         public async Task<int> UpsertAsync(Polyclinic entity)
         {
             entity.AddedOn = DateTime.Now;
@@ -68,5 +82,6 @@ namespace Hospital.Infrastructure.Repository
                 return result;
             }
         }
+
     }
 }

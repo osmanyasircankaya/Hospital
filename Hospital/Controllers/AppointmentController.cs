@@ -51,9 +51,9 @@ namespace Hospital.WebApi.Controllers
             return Ok(data);
         }
         [HttpGet("GetOfPatientsDetailByDataRange/{patientId}/{day}")]
-        
+
         //Hastanın belirli tarih aralığındaki randevularına ait bilgileri içeren metod. Son 30 günkü randevuları almak için day parametresine 30 verirseniz. Bugün ve 30 gün öncesi arasındaki verileri getirir.
-        public async Task<IActionResult> GetOfPatientsDetailByDataRange(string patientId,int day)
+        public async Task<IActionResult> GetOfPatientsDetailByDataRange(string patientId, int day)
         {
             var data = await unitOfWork.Appointments.GetAppointmentsDetailByDateRange(patientId, _dateTimeParse(day));
             if (data == null) return Ok();
@@ -62,7 +62,7 @@ namespace Hospital.WebApi.Controllers
 
         //Doktorların belirli günler aralığındaki randevu sayısını getirir. Son 30 günkü randevu sayısını almak için day parametresine 30 verirseniz. Bugün ve 30 gün öncesi arasındaki verileri getirir.
         [HttpGet("GetSizeByDoctorId/{doctorId}/{day}")]
-        public async Task<IActionResult> GetSizeByDoctorId(int doctorId,int day)
+        public async Task<IActionResult> GetSizeByDoctorId(int doctorId, int day)
         {
             var data = await unitOfWork.Appointments.GetAppointmentsSizeByDoctorId(doctorId, _dateTimeParse(day));
             return Ok(data);
@@ -71,8 +71,8 @@ namespace Hospital.WebApi.Controllers
         //Polikliniğe göre belirli gün aralığındaki randevular
         //Sorunlu.
         [HttpGet("GetSizeByPolyclinicId/{polId}/{day}")]
-        
-        public async Task<IActionResult> GetSizeByPolId(int polId,int day)
+
+        public async Task<IActionResult> GetSizeByPolId(int polId, int day)
         {
             var data = await unitOfWork.Appointments.GetAppoimentsSizeByPolId(polId, _dateTimeParse(day));
             return Ok(data);
@@ -83,8 +83,8 @@ namespace Hospital.WebApi.Controllers
             var data = await unitOfWork.Appointments.GetAppointmentsCountOrderByDate();
             return Ok(data);
         }
-        
-        
+
+
         [HttpPut]
         public async Task<IActionResult> Upsert(Appointment Appointment)
         {
@@ -101,6 +101,22 @@ namespace Hospital.WebApi.Controllers
         public async Task<IActionResult> Delete(string patientId)
         {
             var data = await unitOfWork.Appointments.DeleteAppointmentByIdAsync(patientId);
+            return Ok(data);
+        }
+
+        [HttpGet("GetCountByHours/{startHour}/{endHour}")]
+        public async Task<IActionResult> GetCountByHours(int startHour, int endHour)
+        {
+            var data = await unitOfWork.Appointments.GetAppointmentCountByHours(startHour, endHour);
+            if (data == null) return Ok();
+            return Ok(data);
+        }
+
+        [HttpGet("GetWeekDayByAppointmentCount")]
+        public async Task<IActionResult> GetWeekDayByCount()
+        {
+            var data = await unitOfWork.Appointments.GetWeekDayByAppointmentCount();
+            if (data == null) return Ok();
             return Ok(data);
         }
 
