@@ -195,4 +195,44 @@ SELECT DATEPART(HOUR,AppointmentDate) as HOURS, Count(*) as AppointmentCount fro
 WHERE DATEPART(HOUR,AppointmentDate) BETWEEN @StartTime AND @EndTime Group By DATEPART(HOUR,AppointmentDate) 
 Order By AppointmentCount DESC
 
+CREATE PROCEDURE GetDoctorById @Id int
+AS
+SELECT * FROM Doctor WHERE Id=@Id
+
+CREATE PROCEDURE GetDoctorsByPolId @polId int
+AS
+SELECT * FROM Doctor WHERE PolId=@PolId
+
+CREATE PROCEDURE DeleteDoctor @Id int
+AS
+DELETE FROM Doctor WHERE Id=@Id
+
+CREATE PROCEDURE DeletePolyclinic @Id int
+AS
+DELETE FROM Polyclinic WHERE Id=@Id
+
+CREATE PROCEDURE GetPolyclinicById @Id int
+AS
+SELECT * FROM Polyclinic WHERE Id=@Id
+
+CREATE PROCEDURE DeletePatient @Id int
+AS
+DELETE FROM Patient WHERE Id=@Id
+
+CREATE PROCEDURE GetPatientById @Id varchar(50)
+AS
+SELECT * FROM Patient WHERE Id=@Id
+
+CREATE PROCEDURE DeleteAppointment @Id int
+AS
+DELETE FROM Appointment WHERE Id=@Id
+
+CREATE PROCEDURE GetAppointmentsByPatientId @patientId varchar(50)
+AS
+SELECT * FROM Appointment WHERE PatientId=@patientId
+
+CREATE PROCEDURE GetAppointmentById @Id int
+AS
+SELECT * FROM Appointment WHERE Id=@Id
+
 
