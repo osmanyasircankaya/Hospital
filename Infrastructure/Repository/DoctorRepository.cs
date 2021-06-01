@@ -79,9 +79,9 @@ namespace Hospital.Infrastructure.Repository
             entity.AddedOn = DateTime.Now;
             entity.ModifiedOn = DateTime.Now;
             var sql = "IF EXISTS " +
-                "(SELECT * FROM Doctor WHERE Id = @Id) UPDATE Doctor SET FirstName = @FirstName, LastName = @LastName, PolId = @PolId, ModifiedOn = @ModifiedOn WHERE Id = @Id " +
+                "(SELECT * FROM Doctor WHERE Id = @Id) UPDATE Doctor SET FirstName = @FirstName, LastName = @LastName, Mail = @Mail, PolId = @PolId, ModifiedOn = @ModifiedOn WHERE Id = @Id " +
                 "ELSE " +
-                "INSERT INTO Doctor (FirstName, LastName, PolId, AddedOn) VALUES (@FirstName, @LastName, @PolId, @AddedOn) ";
+                "INSERT INTO Doctor (FirstName, LastName, Mail, PolId, AddedOn) VALUES (@FirstName, @LastName, @Mail, @PolId, @AddedOn) ";
 
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
