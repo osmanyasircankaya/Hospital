@@ -17,6 +17,16 @@
         </v-row>
         <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
+            <v-text-field
+              v-model="Patient.Mail"
+              :rules="emailRules"
+              solo
+              label="E-Mail Adresi"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row justify="center" align="center">
+          <v-col cols="12" sm="4">
             <v-select
               v-model="polId"
               :item-text="(item) => item.id"
@@ -55,8 +65,7 @@
         <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
             <v-datetime-picker
-              
-              label="Traih Seçiniz"
+              label="Tarih Seçiniz"
               v-model="Appointment.AppointmentDate"
               :date-picker-props="dateProps"
               :time-picker-props="timeProps"
@@ -84,6 +93,7 @@ export default {
       polId: 0,
       polyclinics: [],
       doctors: [],
+      appointmentDates: [],
       Appointment: {
         AppointmentDate: null,
         IsEmpty: false,
@@ -98,6 +108,7 @@ export default {
         headerColor: "blue",
         min: new Date().toISOString().substr(0, 10),
         max: "2021-07-18",
+        allowedDates: this.allowedDates,
       },
       timeProps: {
         useSeconds: false,
@@ -124,15 +135,27 @@ export default {
       rules: [
         (v) => v.length === 11 || "Kimlik numarası 11 karakterli olmalı !",
       ],
+      emailRules: [ 
+        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Lütfen geçerli bir E-mail adresi giriniz'
+      ]
     };
   },
   created() {
     this.getPolyclinics();
+    this.getAppointments();
   },
   methods: {
-    allowedHours: (v) => v >= 8 || v <= 16,
+    allowedHours: (v) => (v >= 8 || v <= 16) && v != 12,
 
     allowedStep: (m) => m % 15 === 0,
+
+    allowedDates(val) {
+      for (var i = 0; i < this.appointmentDates.length; i++) {
+        if (this.appointmentDates[i] != val) {
+          return val;
+        }
+      }
+    },
 
     submit() {
       if (this.Patient.Id.length === 11) {
@@ -173,6 +196,9 @@ export default {
       ApiService.get("api/Appointment")
         .then((response) => {
           this.Appointments = response.data;
+          this.Appointments.forEach((element, index) => {
+            this.appointmentDates[index] = element.appointmentDate;
+          });
         })
         .catch(function (error) {
           alert(error);
