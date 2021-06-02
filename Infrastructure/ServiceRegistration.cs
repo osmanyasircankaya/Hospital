@@ -1,5 +1,7 @@
-﻿using Hospital.Application.Interfaces;
+﻿using Application.Interfaces;
+using Hospital.Application.Interfaces;
 using Hospital.Infrastructure.Repository;
+using Infrastructure.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hospital.Infrastructure
@@ -16,6 +18,8 @@ namespace Hospital.Infrastructure
             services.AddTransient<IPatient, PatientService>();
             services.AddTransient<IPolyclinic, PolyclinicService>();
             services.AddTransient<IAppointment, AppointmentService>();
+            services.AddTransient<IStatistic, StatisticService>();
+            services.AddTransient<IStatisticRepository, StatisticRepository>();
         }
     }
 }
