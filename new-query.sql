@@ -52,8 +52,8 @@ VALUES
 (2, 'Fatma', 'Aslan', 'yesim_oztas@paint.com', 1, '2021-05-20 00:00:00.000', NULL),
 (3, 'Kemal', 'Baycan', 'baycan_kemal@paint.com', 2, '2021-05-20 00:00:00.000', NULL),
 (4, 'Yaren', 'Atan', 'atan_nazli@paint.com', 2, '2021-05-20 00:00:00.000', NULL),
-(5, 'Fatih',  'Kuyu', 'kuyu_fatih@paint.com', 3, '2021-05-20 00:00:00.000', NULL),
-(6, 'Hatice',  'Sayın', 'sayin_hatice@paint.com', 3, '2021-05-20 00:00:00.000', NULL)
+(5, 'Fatih', 'Kuyu', 'kuyu_fatih@paint.com', 3, '2021-05-20 00:00:00.000', NULL),
+(6, 'Hatice', 'Sayın', 'sayin_hatice@paint.com', 3, '2021-05-20 00:00:00.000', NULL)
 
 
 INSERT INTO Patient	
