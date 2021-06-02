@@ -2,6 +2,7 @@ CREATE DATABASE Hospital
 
 USE Hospital
 
+
 CREATE TABLE Polyclinic
 (
 	Id		int PRIMARY KEY NOT NULL,	
@@ -40,6 +41,7 @@ CREATE TABLE Appointment
 	ModifiedOn	datetime NULL
 )
 
+
 INSERT INTO Polyclinic
 VALUES
 (1, 'Kardiyoloji','2021-05-20 00:00:00.000', NULL),
@@ -64,9 +66,6 @@ VALUES
 ('23621156863', 'hatic25esu@ismu.edu.tr', '2021-05-20 00:00:00.000', NULL),
 ('34526732824', 'kaykilmaz_suzeynep93@gmail.com', '2021-05-20 00:00:00.000', NULL)
 
-CREATE PROC GetAllAppointment
-AS 
-Select count(*) from Appointment;
 
 CREATE TRIGGER SendAppointmentGet
 ON Appointment
@@ -144,6 +143,7 @@ SET NOCOUNT ON;
           @body =@body
 END
 
+
 CREATE PROCEDURE IncSalaryDocsMail
 AS
 	DECLARE @Mail varchar(255)
@@ -162,7 +162,6 @@ AS
 					@body =@body
 			SET @Count += 1
 		END
-		
 		
 --Çoktan aza randevu alınan poliklinikler
 CREATE PROCEDURE FindAppointmentCountWithPolyclinicName
