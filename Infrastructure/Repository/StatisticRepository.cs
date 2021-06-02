@@ -32,6 +32,17 @@ namespace Infrastructure.Repository
             }
         }
 
+        public async Task<int> GetAppointmentsCount()
+        {
+            var sql = "SELECT COUNT(*) FROM Appointments ";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<int>(sql);
+                return result.First();
+            }
+        }
+
         public async Task<List<dynamic>> GetAppointmentsCountOrderByDate()
         {
             var sql = "Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate) Order By AppointmentCount Desc";
