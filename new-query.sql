@@ -68,18 +68,6 @@ CREATE PROC GetAllAppointment
 AS 
 Select count(*) from Appointment;
 
-/*
-CREATE PROCEDURE getLastMail
-AS
-SELECT TOP 1 Patient.Mail FROM Patient INNER JOIN Appointment ON Patient.Id = Appointment.PatientId ORDER BY Appointment.AddedOn DESC
-GO
-
-CREATE PROCEDURE getLastDate
-AS
-SELECT TOP 1 Appointment.AppointmentDate FROM Appointment ORDER BY Appointment.AddedOn DESC
-GO
-*/
-
 CREATE TRIGGER SendAppointmentGet
 ON Appointment
 AFTER INSERT
