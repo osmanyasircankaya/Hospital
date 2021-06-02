@@ -1,6 +1,6 @@
-CREATE DATABASE Temp
+CREATE DATABASE Hospital
 
-USE Temp
+USE Hospital
 
 CREATE TABLE Polyclinic
 (
@@ -24,6 +24,7 @@ CREATE TABLE Doctor
 CREATE TABLE Patient
 (	
 	Id		varchar(255) PRIMARY KEY NOT NULL,
+	Mail		varchar(255) NOT NULL,
 	AddedOn		datetime NOT NULL,
 	ModifiedOn	datetime NULL
 )
@@ -41,27 +42,27 @@ CREATE TABLE Appointment
 
 INSERT INTO Polyclinic
 VALUES
-(1, 'Kardiyoloji','2016-12-21 00:00:00.000', NULL),
-(2, 'Ortopedi ve Travmatoloji','2016-12-21 00:00:00.000', NULL)
+(1, 'Kardiyoloji','2021-05-20 00:00:00.000', NULL),
+(2, 'Ortopedi ve Travmatoloji','2021-05-20 00:00:00.000', NULL),
+(3, 'Dahiliye', '2021-05-20 00:00:00.000', NULL)
 
 INSERT INTO Doctor
 VALUES
-(1, 'Utku', 'Kaya', 'gumus_utku@paint.com', 1, '2016-12-21 00:00:00.000', NULL),
-(2, 'Fatma', 'Aslan', 'yesim_oztas@paint.com', 1, '2016-12-21 00:00:00.000', NULL),
-(3, 'Kemal', 'Baycan', 'baycan_kemal@paint.com', 2, '2016-12-21 00:00:00.000', NULL),
-(4, 'Yaren', 'Atan', 'atan_nazli@paint.com', 2, '2016-12-21 00:00:00.000', NULL),
-(5, 'Fatih',  'Kuyu', 'kuyu_fatih@paint.com', 3, '2016-12-21 00:00:00.000', NULL),
-(6, 'Hatice',  'Sayın', 'sayin_hatice@paint.com', 3, '2016-12-21 00:00:00.000', NULL)
-
+(1, 'Utku', 'Kaya', 'gumus_utku@paint.com', 1, '2021-05-20 00:00:00.000', NULL),
+(2, 'Fatma', 'Aslan', 'yesim_oztas@paint.com', 1, '2021-05-20 00:00:00.000', NULL),
+(3, 'Kemal', 'Baycan', 'baycan_kemal@paint.com', 2, '2021-05-20 00:00:00.000', NULL),
+(4, 'Yaren', 'Atan', 'atan_nazli@paint.com', 2, '2021-05-20 00:00:00.000', NULL),
+(5, 'Fatih',  'Kuyu', 'kuyu_fatih@paint.com', 3, '2021-05-20 00:00:00.000', NULL),
+(6, 'Hatice',  'Sayın', 'sayin_hatice@paint.com', 3, '2021-05-20 00:00:00.000', NULL)
 
 
 INSERT INTO Patient	
 VALUES
-('52621459889', '2016-12-21 00:00:00.000', NULL),
-('94367459231', '2016-12-21 00:00:00.000', NULL),
-('49412459247', '2016-12-21 00:00:00.000', NULL),
-('23621156863', '2016-12-21 00:00:00.000', NULL),
-('34526732824', '2016-12-21 00:00:00.000', NULL)
+('52621459889', 'kayhan21.coc@hotmail.com', '2021-05-20 00:00:00.000', NULL),
+('94367459231', 'barisOkta18@gmail.com', '2021-05-20 00:00:00.000', NULL),
+('49412459247', 'nur.15kirit@yahoo.com' ,'2021-05-20 00:00:00.000', NULL),
+('23621156863', 'hatic25esu@ismu.edu.tr', '2021-05-20 00:00:00.000', NULL),
+('34526732824', 'kaykilmaz_suzeynep93@gmail.com', '2021-05-20 00:00:00.000', NULL)
 
 CREATE PROC GetAllAppointment
 AS 
