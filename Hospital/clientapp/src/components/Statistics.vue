@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="mb-5" style="color: #FFFFFF">İSTATİSTİKLER</h1>
-    <div class="d-flex justify-content-center mt-5 mb-5">
+    <!-- <div class="d-flex justify-content-center mt-5 mb-5">
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -76,7 +76,7 @@
           </tbody>
         </template>
       </v-simple-table>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -87,54 +87,122 @@ export default {
   name: "Statistics",
   data() {
     return {
-      doctors: [],
-      patients: [],
-      polyclinics: [],
-      Appointments: []
+      appointmensCountOrderByDate: [],
+      doctorsOrderByAppointmentCount: [],
+      maximumAppointmentDay: {},
+      minimumAppointmentDay: {},
+      polyclinicNameByAppointmentCount: [],
+      weekDayByAppointmentCount: [],
+      appointmentCountByHours: [],
+      appointmentsSizeByDoctorId: 0,
+      appointmentsDetailByDateRange: []
     };
   },
   created() {
-    this.getDoctors();
-    this.getPatients();
-    this.getPolyclinics();
-    this.getAppointments();
+    this.getAppointmensCountOrderByDate()
+    this.getDoctorsOrderByAppointmentCount()
+    this.getMaximumAppointmentDay()
+    this.getMinimumAppointmentDay()
+    this.getPolyclinicNameByAppointmentCount()
+    this.getWeekDayByAppointmentCount()
+    this.getAppointmentCountByHours()
+    this.getAppointmentsSizeByDoctorId()
+    this.getAppointmentsDetailByDateRange()
   },
   methods: {
-    getDoctors() {
+    getAppointmensCountOrderByDate() {
       ApiService.setHeader();
-      ApiService.get("api/Doctor")
+      ApiService.get("api/Statistic/GetAppointmentsCountOrderByDate")
         .then((response) => {
-          this.doctors = response.data;
+          this.appointmensCountOrderByDate = response.data;
         })
         .catch(function (error) {
           alert(error);
         });
     },
-    getPatients() {
+
+    getDoctorsOrderByAppointmentCount() {
       ApiService.setHeader();
-      ApiService.get("api/Patient")
+      ApiService.get("api/Statistic/GetDoctorsOrderByAppointmentCount")
         .then((response) => {
-          this.patients = response.data;
+          this.doctorsOrderByAppointmentCount = response.data;
         })
         .catch(function (error) {
           alert(error);
         });
     },
-    getPolyclinics() {
+
+    getMaximumAppointmentDay() {
       ApiService.setHeader();
-      ApiService.get("api/Polyclinic")
+      ApiService.get("api/Statistic/GetMaximumAppointmentDay")
         .then((response) => {
-          this.polyclinics = response.data;
+          this.maximumAppointmentDay = response.data;
         })
         .catch(function (error) {
           alert(error);
         });
     },
-    getAppointments() {
+
+    getMinimumAppointmentDay() {
       ApiService.setHeader();
-      ApiService.get("api/Appointment")
+      ApiService.get("api/Statistic/GetMinimumAppointmentDay")
         .then((response) => {
-          this.Appointments = response.data;
+          this.minimumAppointmentDay = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
+    getPolyclinicNameByAppointmentCount() {
+      ApiService.setHeader();
+      ApiService.get("api/Statistic/GetPolyclinicNameByAppointmentCount")
+        .then((response) => {
+          this.polyclinicNameByAppointmentCount = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
+    getWeekDayByAppointmentCount() {
+      ApiService.setHeader();
+      ApiService.get("api/Statistic/GetWeekDayByAppointmentCount")
+        .then((response) => {
+          this.weekDayByAppointmentCount = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
+    getAppointmentsSizeByDoctorId() {
+      ApiService.setHeader();
+      ApiService.get("api/Statistic/GetAppointmentsSizeByDoctorId/" + 3 + "/" + 30)
+        .then((response) => {
+          this.appointmentsSizeByDoctorId = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
+    getAppointmentsDetailByDateRange() {
+      ApiService.setHeader();
+      ApiService.get("api/Statistic/GetAppointmentsDetailByDateRange/" + "21443134132" + "/" + 30)
+        .then((response) => {
+          this.appointmentsDetailByDateRange = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
+    getAppointmentCountByHours() {
+      ApiService.setHeader();
+      ApiService.get("api/Statistic/getAppointmentCountByHours/" + 9 + "/" + 17)
+        .then((response) => {
+          this.appointmentCountByHours = response.data;
         })
         .catch(function (error) {
           alert(error);

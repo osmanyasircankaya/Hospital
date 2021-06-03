@@ -64,15 +64,17 @@
         </v-row>
         <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
-            <v-datetime-picker
-              label="Tarih Seçiniz"
-              v-model="Appointment.AppointmentDate"
-              :date-picker-props="dateProps"
-              :time-picker-props="timeProps"
-            >
-              <template slot="dateIcon"> Tarih </template>
-              <template slot="timeIcon"> Saat </template>
-            </v-datetime-picker>
+            <div style="backgroundcolor: #ffffff">
+              <v-datetime-picker
+                label="Tarih Seçiniz"
+                v-model="Appointment.AppointmentDate"
+                :date-picker-props="dateProps"
+                :time-picker-props="timeProps"
+              >
+                <template slot="dateIcon"> Tarih </template>
+                <template slot="timeIcon"> Saat </template>
+              </v-datetime-picker>
+            </div>
           </v-col>
         </v-row>
       </v-container>
@@ -108,7 +110,7 @@ export default {
         headerColor: "blue",
         min: new Date().toISOString().substr(0, 10),
         max: "2021-07-18",
-        allowedDates: this.allowedDates,
+        showCurrent: true
       },
       timeProps: {
         useSeconds: false,
@@ -135,9 +137,12 @@ export default {
       rules: [
         (v) => v.length === 11 || "Kimlik numarası 11 karakterli olmalı !",
       ],
-      emailRules: [ 
-        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Lütfen geçerli bir E-mail adresi giriniz'
-      ]
+      emailRules: [
+        (v) =>
+          !v ||
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          "Lütfen geçerli bir E-mail adresi giriniz",
+      ],
     };
   },
   created() {
@@ -149,24 +154,25 @@ export default {
 
     allowedStep: (m) => m % 15 === 0,
 
-    allowedDates(val) {
-      for (var i = 0; i < this.appointmentDates.length; i++) {
-        if (this.appointmentDates[i] != val) {
-          return val;
-        }
-      }
-    },
-
     submit() {
+      this.checkDate();
       if (this.Patient.Id.length === 11) {
         this.createPatient();
         setTimeout(() => {
           this.createAppointment();
         }, 1000);
-        this.$router.push("Menu");
+        //this.$router.push("Menu");
       } else {
         alert("Kimlik numarası 11 haneli olmak zorunda");
       }
+    },
+
+    checkDate() {
+      this.appointmentDates.forEach((element) => {
+        if (element === this.Appointment.AppointmentDate) {
+          alert("Bu tarih ve saat seçilemez");
+        }
+      });
     },
 
     getPolyclinics() {
