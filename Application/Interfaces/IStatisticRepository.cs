@@ -8,6 +8,7 @@ namespace Application.Interfaces
 {
     public interface IStatisticRepository
     {
+        Task<int> GetAppointmentsCount();
         Task<int> GetAppointmentsSizeByDoctorId(int doctorId, string date);
         Task<List<dynamic>> GetAppointmentsCountOrderByDate();
         Task<dynamic> GetMinimumAppointmentDay();

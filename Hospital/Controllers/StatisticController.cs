@@ -18,6 +18,12 @@ namespace Hospital.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
+        [HttpGet("GetAppointmentsCount")]
+        public async Task<IActionResult> GetAppointmentsCount()
+        {
+            var data = await unitOfWork.Statistics.GetAppointmentsCount();
+            return Ok(data);
+        }
         [HttpGet("GetAppointmentCountByHours/{startHour}/{endHour}")]
         public async Task<IActionResult> GetAppointmentCountByHours(int startHour, int endHour)
         {
