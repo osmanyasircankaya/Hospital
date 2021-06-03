@@ -18,64 +18,6 @@
           </tbody>
         </template>
       </v-simple-table>
-    </div>
-    <div class="d-flex justify-content-center mb-5">
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">İsim</th>
-              <th class="text-left">Soyisim</th>
-              <th class="text-left">Kayıt Tarihi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in doctors" :key="item.name">
-              <td>{{ item.firstName }}</td>
-              <td>{{ item.lastName }}</td>
-              <td>{{ item.addedOn }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
-    </div>
-    <div class="d-flex justify-content-center mb-5">
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">İsim</th>
-              <th class="text-left">Kayıt Tarihi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in polyclinics" :key="item.Name">
-              <td>{{ item.name }}</td>
-              <td>{{ item.addedOn }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
-    </div>
-    <div class="d-flex justify-content-center mb-5">
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Tarih</th>
-              <th class="text-left">Doktor</th>
-              <th class="text-left">Hasta</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in Appointments" :key="item.id">
-              <td>{{ item.appointmentDate }}</td>
-              <td>{{ item.doctorId }}</td>
-              <td>{{ item.patientId }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
     </div> -->
   </div>
 </template>
@@ -95,7 +37,8 @@ export default {
       weekDayByAppointmentCount: [],
       appointmentCountByHours: [],
       appointmentsSizeByDoctorId: 0,
-      appointmentsDetailByDateRange: []
+      appointmentsDetailByDateRange: [],
+      appointmentsCount: 0
     };
   },
   created() {
@@ -108,6 +51,7 @@ export default {
     this.getAppointmentCountByHours()
     this.getAppointmentsSizeByDoctorId()
     this.getAppointmentsDetailByDateRange()
+    this.getAppointmentsCount()
   },
   methods: {
     getAppointmensCountOrderByDate() {
@@ -203,6 +147,17 @@ export default {
       ApiService.get("api/Statistic/getAppointmentCountByHours/" + 9 + "/" + 17)
         .then((response) => {
           this.appointmentCountByHours = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
+    getAppointmentsCount() {
+      ApiService.setHeader();
+      ApiService.get("api/Statistic/GetAppointmentsCount")
+        .then((response) => {
+          this.appointmentsCount = response.data;
         })
         .catch(function (error) {
           alert(error);
