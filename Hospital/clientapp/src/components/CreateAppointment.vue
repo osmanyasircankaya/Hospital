@@ -78,6 +78,9 @@
           </v-col>
         </v-row>
       </v-container>
+      <v-btn class="mr-4" color="error" type="submit" @click="exit()">
+        MENÜYE DÖN
+      </v-btn>
       <v-btn class="mr-4" color="success" type="submit" @click="submit()">
         RANDEVU AL
       </v-btn>
@@ -110,7 +113,7 @@ export default {
         headerColor: "blue",
         min: new Date().toISOString().substr(0, 10),
         max: "2021-07-18",
-        showCurrent: true
+        showCurrent: true,
       },
       timeProps: {
         useSeconds: false,
@@ -161,10 +164,14 @@ export default {
         setTimeout(() => {
           this.createAppointment();
         }, 1000);
-        //this.$router.push("Menu");
+        this.$router.push("Menu");
       } else {
         alert("Kimlik numarası 11 haneli olmak zorunda");
       }
+    },
+
+    exit() {
+      this.$router.push("Menu");
     },
 
     checkDate() {

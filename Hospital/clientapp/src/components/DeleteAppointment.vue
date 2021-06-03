@@ -40,7 +40,7 @@
           >
         </v-col>
       </v-row>
-      <v-btn class="mt-2" color="outline-light" type="submit" @click="submit()">
+      <v-btn class="mt-2" color="outline-light" @click="submit()">
         RANDEVUYU İPTAL ET
       </v-btn>
     </v-form>
@@ -76,7 +76,6 @@ export default {
       ],
     };
   },
-  created() {},
   methods: {
     submit() {
       if (this.Patient.Id.length === 11) {
@@ -92,6 +91,7 @@ export default {
         .then((response) => {
           if (response.data.length === 0) {
             alert("Bu kimlik numarasına ait randevu bulunamadı.");
+            return
           }
           this.Appointments = response.data;
         })

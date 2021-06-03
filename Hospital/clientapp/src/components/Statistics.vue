@@ -4,7 +4,14 @@
     <div class="d-flex justify-content-center mt-5 mb-5">
       <v-dialog v-model="dialog1" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" class="mr-5" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            class="mr-5"
+            v-on="on"
+            width="500px"
+          >
             Randevu Sayısına Göre Tarihlerin Sıralaması
           </v-btn>
         </template>
@@ -30,7 +37,13 @@
       </v-dialog>
       <v-dialog v-model="dialog2" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            v-on="on"
+            width="500px"
+          >
             En Çok Randevusu Olan Doktorlar
           </v-btn>
         </template>
@@ -58,7 +71,14 @@
     <div class="d-flex justify-content-center mt-5 mb-5">
       <v-dialog v-model="dialog3" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" class="mr-5" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            class="mr-5"
+            v-on="on"
+            width="500px"
+          >
             Randevu Sayısına Göre Poliklinikler
           </v-btn>
         </template>
@@ -84,7 +104,13 @@
       </v-dialog>
       <v-dialog v-model="dialog4" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            v-on="on"
+            width="500px"
+          >
             Randevu Sayısına Göre Günler
           </v-btn>
         </template>
@@ -112,7 +138,14 @@
     <div class="d-flex justify-content-center mt-5 mb-5">
       <v-dialog v-model="dialog5" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" class="mr-5" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            class="mr-5"
+            v-on="on"
+            width="500px"
+          >
             Saatlere Göre Randevu Sayıları
           </v-btn>
         </template>
@@ -135,7 +168,13 @@
       </v-dialog>
       <v-dialog v-model="dialog6" width="300px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            v-on="on"
+            width="500px"
+          >
             Doktorlara Göre Randevu Sayıları
           </v-btn>
         </template>
@@ -150,7 +189,14 @@
     <div class="d-flex justify-content-center mt-5 mb-5">
       <v-dialog v-model="dialog7" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" class="mr-5" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            class="mr-5"
+            v-on="on"
+            width="500px"
+          >
             Seçilen Hastanın Randevuları
           </v-btn>
         </template>
@@ -178,7 +224,13 @@
       </v-dialog>
       <v-dialog v-model="dialog10" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            v-on="on"
+            width="500px"
+          >
             Toplam Randevu Sayısı
           </v-btn>
         </template>
@@ -190,7 +242,14 @@
     <div class="d-flex justify-content-center mt-5 mb-5">
       <v-dialog v-model="dialog9" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" class="mr-5" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            class="mr-5"
+            v-on="on"
+            width="500px"
+          >
             En Çok Randevu Alınan Tarih
           </v-btn>
         </template>
@@ -203,7 +262,13 @@
       </v-dialog>
       <v-dialog v-model="dialog10" width="600px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="#ffffff" outlined v-bind="attrs" v-on="on" width="500px">
+          <v-btn
+            color="#ffffff"
+            outlined
+            v-bind="attrs"
+            v-on="on"
+            width="500px"
+          >
             En Az Randevu Alınan Tarih
           </v-btn>
         </template>
@@ -214,6 +279,9 @@
           </h5>
         </div>
       </v-dialog>
+    </div>
+    <div class="d-flex justify-content-center mt-5 mb-5">
+      <v-btn color="error" type="submit" @click="exit()"> MENÜYE DÖN </v-btn>
     </div>
   </v-app>
 </template>
@@ -260,6 +328,10 @@ export default {
     this.getAppointmentsCount();
   },
   methods: {
+    exit() {
+      this.$router.push("Menu");
+    },
+
     getAppointmensCountOrderByDate() {
       ApiService.setHeader();
       ApiService.get("api/Statistic/GetAppointmentsCountOrderByDate")
