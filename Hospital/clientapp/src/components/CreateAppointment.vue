@@ -92,8 +92,8 @@
 </template>
 
 <script>
-import ApiService from "@/core/api.service.js"
-import moment from 'moment'
+import ApiService from "@/core/api.service.js";
+import moment from "moment";
 
 export default {
   name: "CreateAppointment",
@@ -128,9 +128,9 @@ export default {
         min: "9:00",
         max: "16:45",
       },
-      textProps:{
+      textProps: {
         solo: true,
-        suffix: "TSİ"
+        suffix: "TSİ",
       },
       mask: [
         /[1-9]/,
@@ -162,12 +162,9 @@ export default {
   },
 
   filters: {
-    moment: function(date) {
-      return moment(date)
-        .add(3, 'h')
-        .locale('tr')
-        .format('LLL')
-    }
+    moment: function (date) {
+      return moment(date).add(3, "h").locale("tr").format("LLL");
+    },
   },
 
   methods: {
@@ -178,18 +175,31 @@ export default {
     submit() {
       this.checkDate();
       if (this.Patient.Id.length === 11) {
-        this.createPatient();
+        this.createPatient()
         setTimeout(() => {
           this.createAppointment();
         }, 1000);
-        this.$router.push("Menu");
+        this.showAlert()
+        setTimeout(() => {
+          this.$router.push("Menu");
+        }, 3000);
       } else {
-        alert("Kimlik numarası 11 haneli olmak zorunda");
+        this.$swal('HATA',"KİMLİK NUMARASI 11 HANELİ OLMALIDIR", "error");
       }
     },
 
     exit() {
       this.$router.push("Menu");
+    },
+
+    showAlert() {
+      this.$swal({
+        icon: "success",
+        title:"RANDEVUNUZ BAŞARIYLA OLUŞTURULDU",
+        text:"MENÜYE YÖNLENDİRİLİYORSUNUZ",
+        timer: 3000
+        }
+      );
     },
 
     checkDate() {
