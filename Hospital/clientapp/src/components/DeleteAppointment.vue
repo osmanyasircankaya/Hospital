@@ -16,7 +16,10 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-btn color="outline-light" type="submit" @click="getAppointments()">
+      <v-btn class="mr-4" color="error" type="submit" @click="exit()">
+        MENÜYE DÖN
+      </v-btn>
+      <v-btn color="outline-light" @click="getAppointments()">
         RANDEVULARI GETİR
       </v-btn>
     </v-form>
@@ -32,10 +35,10 @@
             solo
           >
             <template slot="selection" slot-scope="data">{{
-              data.item.id
+              data.item.appointmentDate | moment
             }}</template>
             <template slot="item" slot-scope="data">{{
-              data.item.id
+              data.item.appointmentDate | moment
             }}</template></v-select
           >
         </v-col>
@@ -49,6 +52,7 @@
 
 <script>
 import ApiService from "@/core/api.service.js";
+import moment from "moment";
 
 export default {
   name: "CreateAppointment",
@@ -76,6 +80,17 @@ export default {
       ],
     };
   },
+
+  filters: {
+    moment: function (date) {
+      return moment(date).add(3, "h").locale("tr").format("LLL");
+    },
+  },
+
+  mounted(){
+    this.getDoctors()
+  },
+
   methods: {
     submit() {
       if (this.Patient.Id.length === 11) {
@@ -85,20 +100,37 @@ export default {
         alert("Kimlik numarası 11 haneli olmak zorunda");
       }
     },
+    
+    exit() {
+      this.$router.push("Menu");
+    },
+
     getAppointments() {
       ApiService.setHeader();
       ApiService.get("api/Appointment/GetAllByPatientId", this.Patient.Id)
         .then((response) => {
           if (response.data.length === 0) {
             alert("Bu kimlik numarasına ait randevu bulunamadı.");
-            return
+            return;
           }
-          this.Appointments = response.data;
+          this.Appointments = response.data
         })
         .catch(function (error) {
           alert(error);
         });
     },
+
+    getDoctors() {
+      ApiService.setHeader();
+      ApiService.get("api/Doctor")
+        .then((response) => {
+          this.doctors = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
     deleteAppointment() {
       ApiService.setHeader();
       ApiService.delete(

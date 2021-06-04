@@ -68,8 +68,11 @@
               <v-datetime-picker
                 label="Tarih Seçiniz"
                 v-model="Appointment.AppointmentDate"
+                clearText="İPTAL ET"
+                okText="KAYDET"
                 :date-picker-props="dateProps"
                 :time-picker-props="timeProps"
+                :text-field-props="textProps"
               >
                 <template slot="dateIcon"> Tarih </template>
                 <template slot="timeIcon"> Saat </template>
@@ -89,7 +92,8 @@
 </template>
 
 <script>
-import ApiService from "@/core/api.service.js";
+import ApiService from "@/core/api.service.js"
+import moment from 'moment'
 
 export default {
   name: "CreateAppointment",
@@ -124,6 +128,10 @@ export default {
         min: "9:00",
         max: "16:45",
       },
+      textProps:{
+        solo: true,
+        suffix: "TSİ"
+      },
       mask: [
         /[1-9]/,
         /[0-9]/,
@@ -152,6 +160,16 @@ export default {
     this.getPolyclinics();
     this.getAppointments();
   },
+
+  filters: {
+    moment: function(date) {
+      return moment(date)
+        .add(3, 'h')
+        .locale('tr')
+        .format('LLL')
+    }
+  },
+
   methods: {
     allowedHours: (v) => (v >= 8 || v <= 16) && v != 12,
 

@@ -28,7 +28,7 @@
                 v-for="(item, index) in appointmensCountOrderByDate"
                 :key="index"
               >
-                <td>{{ item.Date }}</td>
+                <td>{{ item.Date | moment }}</td>
                 <td>{{ item.AppointmentCount }}</td>
               </tr>
             </tbody>
@@ -214,7 +214,7 @@
                 v-for="(item, index) in appointmentsDetailByDateRange"
                 :key="index"
               >
-                <td>{{ item.AppointmentDate }}</td>
+                <td>{{ item.AppointmentDate | momentWithHour }}</td>
                 <td>{{ item.DoctorName }}</td>
                 <td>{{ item.PolyclinicName }}</td>
               </tr>
@@ -255,7 +255,7 @@
         </template>
         <div style="background-color: #ffffff; height: 50px">
           <h5>
-            {{ maximumAppointmentDay.Date }}:
+            {{ maximumAppointmentDay.Date | moment}}:
             {{ maximumAppointmentDay.AppointmentCount }} Randevu
           </h5>
         </div>
@@ -274,7 +274,7 @@
         </template>
         <div style="background-color: #ffffff; height: 50px">
           <h5>
-            {{ minimumAppointmentDay.Date }}:
+            {{ minimumAppointmentDay.Date |moment }}:
             {{ minimumAppointmentDay.AppointmentCount }} Randevu
           </h5>
         </div>
@@ -288,6 +288,7 @@
 
 <script>
 import ApiService from "@/core/api.service.js";
+import moment from "moment";
 
 export default {
   name: "Statistics",
@@ -315,6 +316,7 @@ export default {
       appointmentsCount: 0,
     };
   },
+
   created() {
     this.getAppointmensCountOrderByDate();
     this.getDoctorsOrderByAppointmentCount();
@@ -327,6 +329,17 @@ export default {
     this.getAppointmentsDetailByDateRange();
     this.getAppointmentsCount();
   },
+
+  filters: {
+    moment: function (date) {
+      return moment(date).locale("tr").format("LL");
+    },
+
+    momentWithHour: function (date) {
+      return moment(date).add(3, "h").locale("tr").format("LLL");
+    },
+  },
+
   methods: {
     exit() {
       this.$router.push("Menu");
