@@ -23,7 +23,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<int> DeleteAsync(int id)
         {
             var sql = "DeletePolyclinic";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, new { Id = id },commandType:CommandType.StoredProcedure);
@@ -34,7 +34,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<IReadOnlyList<Polyclinic>> GetAllAsync(string sqlCommand=null)
         {
             var sql = "SELECT * FROM Polyclinic";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QueryAsync<Polyclinic>(sql);
@@ -45,7 +45,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<Polyclinic> GetByIdAsync(int id)
         {
             var sql = "GetPolyclinicById";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QuerySingleOrDefaultAsync<Polyclinic>(sql, new { Id = id },commandType:CommandType.StoredProcedure);
@@ -56,7 +56,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<List<dynamic>> GetPolyclinicByAppointmentCount()
         {
             var sql = "FindAppointmentCountWithPolyclinicName";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
 
@@ -75,7 +75,7 @@ namespace Hospital.Infrastructure.Repository
                 "ELSE " +
                 "INSERT INTO Polyclinic (Name, AddedOn) VALUES (@Name,@AddedOn) ";
 
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, entity);

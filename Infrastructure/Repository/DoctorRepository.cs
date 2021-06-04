@@ -22,7 +22,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<int> DeleteAsync(int id)
         {
             var sql = "DeleteDoctor";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, new { Id = id },commandType:System.Data.CommandType.StoredProcedure);
@@ -33,7 +33,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<IReadOnlyList<Doctor>> GetAllAsync(string sqlCommand=null)
         {
             var sql = "SELECT * FROM Doctor";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QueryAsync<Doctor>(sql);
@@ -44,7 +44,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<Doctor> GetByIdAsync(int id)
         {
             var sql = "GetDoctorById";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QuerySingleOrDefaultAsync<Doctor>(sql, new { Id = id },commandType:System.Data.CommandType.StoredProcedure);
@@ -55,7 +55,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<IReadOnlyList<Doctor>> GetDoctorsByPolIdAsync(int polId)
         {
             var sql = "GetDoctorsByPolId";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QueryAsync<Doctor>(sql, new { PolId = polId },commandType:System.Data.CommandType.StoredProcedure);
@@ -66,7 +66,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<List<dynamic>> GetDoctorsOrderByAppointmentCount()
         {
             var sql = "Select Doctor.FirstName + ' ' + Doctor.LastName as FullName,count(Appointment.DoctorId) as AppointmentCount from Doctor left join Appointment ON Doctor.Id=Appointment.DoctorId Group By Doctor.FirstName + ' ' +Doctor.LastName Order By AppointmentCount DESC";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QueryAsync(sql);
@@ -83,7 +83,7 @@ namespace Hospital.Infrastructure.Repository
                 "ELSE " +
                 "INSERT INTO Doctor (FirstName, LastName, Mail, PolId, AddedOn) VALUES (@FirstName, @LastName, @Mail, @PolId, @AddedOn) ";
 
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, entity);

@@ -23,7 +23,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<int> DeleteAppointmentByIdAsync(string patientId)
         {
             var sql = "DELETE FROM Appointment WHERE PatientId = @PatientId";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, new { PatientId = patientId });
@@ -34,40 +34,43 @@ namespace Hospital.Infrastructure.Repository
         public async Task<int> DeleteAsync(int id)
         {
             var sql = "DeleteAppointment";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
-
-            connection.Open();
-            var result = await connection.ExecuteAsync(sql, new { Id = id }, commandType: CommandType.StoredProcedure);
-            return result;
-
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.ExecuteAsync(sql, new { Id = id },commandType:CommandType.StoredProcedure);
+                return result;
+            }
         }
 
         public async Task<IReadOnlyList<Appointment>> GetAppointmentsByPatientIdAsync(string patientId)
         {
             var sql = "GetAppointmentsByPatientId";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
-            connection.Open();
-            var result = await connection.QueryAsync<Appointment>(sql, new { PatientId = patientId }, commandType: CommandType.StoredProcedure);
-            return result.ToList();
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<Appointment>(sql, new { PatientId = patientId },commandType:CommandType.StoredProcedure);
+                return result.ToList();
+            }
         }
 
         public async Task<IReadOnlyList<Appointment>> GetAllAsync(string sqlCommand = null)
         {
             var sql = "SELECT * FROM Appointment";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
-            connection.Open();
-            var result = await connection.QueryAsync<Appointment>(sql);
-            return result.ToList();
-
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<Appointment>(sql);
+                return result.ToList();
+            }
         }
 
         public async Task<Appointment> GetByIdAsync(int id)
         {
-            var sql = "SELECT * FROM Appointment WHERE Id = @Id";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            var sql = "SELECT * FROM Appointment WHERE PatientId = @PatientId";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QuerySingleOrDefaultAsync<Appointment>(sql, new { Id = id });
+                var result = await connection.QuerySingleOrDefaultAsync<Appointment>(sql, new { Id = id },commandType:CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -83,7 +86,7 @@ namespace Hospital.Infrastructure.Repository
                 "ELSE " +
                 "INSERT INTO Appointment (AppointmentDate, IsEmpty, DoctorId, PatientId, AddedOn) VALUES (@AppointmentDate, @IsEmpty, @DoctorId, @PatientId, @AddedOn) ";
 
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.ExecuteAsync(sql, entity);
@@ -94,7 +97,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<int> GetAppointmentsSizeByDoctorId(int doctorId, string date)
         {
             var sql = $"Select count(*) from Appointment where doctorId=@doctorId and AppointmentDate Between '{date}' and GETDATE() ";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QueryAsync<int>(sql, new { doctorId = doctorId });
@@ -102,22 +105,34 @@ namespace Hospital.Infrastructure.Repository
             }
         }
 
+        public async Task<int> GetAppoimentsSizeByPolId(int polId, string date)
+        {
+            var sql = $"Select count(*) from Appointment where polId=@polId and AppointmentDate Between '{date}' and GETDATE()";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var result = await connection.QueryAsync<int>(sql, new { polId = polId });
+                return result.First();
+            }
+        }
+
         public async Task<List<dynamic>> GetAppointmentsCountOrderByDate()
         {
             var sql = "Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate) Order By AppointmentCount Desc";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 List<dynamic> result = (await connection.QueryAsync(sql)).ToList();
 
                 return result;
             }
+
         }
 
         public async Task<dynamic> GetMinimumAppointmentDay()
         {
             var sql = "Select TOP 1 * from  ( Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate))As EnDusukGun";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 dynamic result = await connection.QueryFirstAsync(sql);
@@ -129,7 +144,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<dynamic> GetMaximumAppointmentDay()
         {
             var sql = "Select TOP 1 * from  ( Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate))As EnYuksekGun Order By AppointmentCount DESC";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var result = await connection.QueryFirstAsync(sql);
@@ -142,7 +157,7 @@ namespace Hospital.Infrastructure.Repository
         {
             var sql = "GetAppointmentsDetailByDateRange ";
 
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var values = new { PatientId = patientId, StartingTime = startingTime };
@@ -157,7 +172,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<List<dynamic>> GetAppointmentCountByHours(int startHour, int endHour)
         {
             var sql = "FindAppointmentCountWithHour";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
                 var values = new { StartTime = startHour, EndTime = endHour };
@@ -170,7 +185,7 @@ namespace Hospital.Infrastructure.Repository
         public async Task<List<dynamic>> GetWeekDayByAppointmentCount()
         {
             var sql = "FindWeekDayWithAppointmentCount";
-            using var connection = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
 
