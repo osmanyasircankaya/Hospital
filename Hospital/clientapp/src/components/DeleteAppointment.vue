@@ -16,14 +16,17 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-btn color="outline-light" type="submit" @click="getAppointments()">
+      <v-btn class="mr-4" color="error" type="submit" @click="exit()">
+        MENÜYE DÖN
+      </v-btn>
+      <v-btn color="outline-light" @click="getAppointments()">
         RANDEVULARI GETİR
       </v-btn>
     </v-form>
     <v-form v-if="Appointments.length != 0">
       <v-row class="mt-8" justify="center" align="center">
         <v-col cols="12" sm="4">
-          <h5 class="mt-3" style="color: #ffffff">RANDEVU SEÇ</h5>
+          <h5 class="mt-5" style="color: #ffffff">RANDEVUYU SEÇ</h5>
           <v-select
             :item-text="(item) => item.id"
             :items="Appointments"
@@ -32,15 +35,15 @@
             solo
           >
             <template slot="selection" slot-scope="data">{{
-              data.item.id
+              data.item.appointmentDate | moment
             }}</template>
             <template slot="item" slot-scope="data">{{
-              data.item.id
+              data.item.appointmentDate | moment
             }}</template></v-select
           >
         </v-col>
       </v-row>
-      <v-btn class="mt-2" color="outline-light" type="submit" @click="submit()">
+      <v-btn class="mt-2" color="outline-light" @click="submit()">
         RANDEVUYU İPTAL ET
       </v-btn>
     </v-form>
@@ -49,6 +52,7 @@
 
 <script>
 import ApiService from "@/core/api.service.js";
+import moment from "moment";
 
 export default {
   name: "CreateAppointment",
@@ -76,22 +80,50 @@ export default {
       ],
     };
   },
-  created() {},
+
+  filters: {
+    moment: function (date) {
+      return moment(date).add(3, "h").locale("tr").format("LLL");
+    },
+  },
+
+  mounted() {
+    this.getDoctors();
+  },
+
   methods: {
     submit() {
       if (this.Patient.Id.length === 11) {
         this.deleteAppointment();
-        this.$router.push("Menu");
+        this.showAlert();
+        setTimeout(() => {
+          this.$router.push("Menu");
+        }, 3000);
       } else {
-        alert("Kimlik numarası 11 haneli olmak zorunda");
+        this.$swal('HATA',"KİMLİK NUMARASI 11 HANELİ OLMALIDIR", "error");
       }
     },
+
+    exit() {
+      this.$router.push("Menu");
+    },
+
+    showAlert() {
+      this.$swal({
+        icon: "success",
+        title: "RANDEVUNUZ İPTAL EDİLDİ",
+        text: "MENÜYE YÖNLENDİRİLİYORSUNUZ",
+        timer: 3000,
+      });
+    },
+
     getAppointments() {
       ApiService.setHeader();
       ApiService.get("api/Appointment/GetAllByPatientId", this.Patient.Id)
         .then((response) => {
           if (response.data.length === 0) {
-            alert("Bu kimlik numarasına ait randevu bulunamadı.");
+            this.$swal('EKSİK VEYA HATALI BİLGİ',"BU KİMLİK NUMARASI AİT RANDEVU BULUNAMADI", "question");
+            return;
           }
           this.Appointments = response.data;
         })
@@ -99,6 +131,18 @@ export default {
           alert(error);
         });
     },
+
+    getDoctors() {
+      ApiService.setHeader();
+      ApiService.get("api/Doctor")
+        .then((response) => {
+          this.doctors = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
     deleteAppointment() {
       ApiService.setHeader();
       ApiService.delete(

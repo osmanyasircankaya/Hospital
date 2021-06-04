@@ -64,18 +64,26 @@
         </v-row>
         <v-row justify="center" align="center">
           <v-col cols="12" sm="4">
-            <v-datetime-picker
-              label="Tarih Seçiniz"
-              v-model="Appointment.AppointmentDate"
-              :date-picker-props="dateProps"
-              :time-picker-props="timeProps"
-            >
-              <template slot="dateIcon"> Tarih </template>
-              <template slot="timeIcon"> Saat </template>
-            </v-datetime-picker>
+            <div style="backgroundcolor: #ffffff">
+              <v-datetime-picker
+                label="Tarih Seçiniz"
+                v-model="Appointment.AppointmentDate"
+                clearText="İPTAL ET"
+                okText="KAYDET"
+                :date-picker-props="dateProps"
+                :time-picker-props="timeProps"
+                :text-field-props="textProps"
+              >
+                <template slot="dateIcon"> Tarih </template>
+                <template slot="timeIcon"> Saat </template>
+              </v-datetime-picker>
+            </div>
           </v-col>
         </v-row>
       </v-container>
+      <v-btn class="mr-4" color="error" type="submit" @click="exit()">
+        MENÜYE DÖN
+      </v-btn>
       <v-btn class="mr-4" color="success" type="submit" @click="submit()">
         RANDEVU AL
       </v-btn>
@@ -85,6 +93,7 @@
 
 <script>
 import ApiService from "@/core/api.service.js";
+import moment from "moment";
 
 export default {
   name: "CreateAppointment",
@@ -108,7 +117,7 @@ export default {
         headerColor: "blue",
         min: new Date().toISOString().substr(0, 10),
         max: "2021-07-18",
-        allowedDates: this.allowedDates,
+        showCurrent: true,
       },
       timeProps: {
         useSeconds: false,
@@ -118,6 +127,10 @@ export default {
         format: "24hr",
         min: "9:00",
         max: "16:45",
+      },
+      textProps: {
+        solo: true,
+        suffix: "TSİ",
       },
       mask: [
         /[1-9]/,
@@ -135,38 +148,66 @@ export default {
       rules: [
         (v) => v.length === 11 || "Kimlik numarası 11 karakterli olmalı !",
       ],
-      emailRules: [ 
-        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Lütfen geçerli bir E-mail adresi giriniz'
-      ]
+      emailRules: [
+        (v) =>
+          !v ||
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          "Lütfen geçerli bir E-mail adresi giriniz",
+      ],
     };
   },
   created() {
     this.getPolyclinics();
     this.getAppointments();
   },
+
+  filters: {
+    moment: function (date) {
+      return moment(date).add(3, "h").locale("tr").format("LLL");
+    },
+  },
+
   methods: {
     allowedHours: (v) => (v >= 8 || v <= 16) && v != 12,
 
     allowedStep: (m) => m % 15 === 0,
 
-    allowedDates(val) {
-      for (var i = 0; i < this.appointmentDates.length; i++) {
-        if (this.appointmentDates[i] != val) {
-          return val;
-        }
-      }
-    },
-
     submit() {
+      this.checkDate();
       if (this.Patient.Id.length === 11) {
-        this.createPatient();
+        this.createPatient()
         setTimeout(() => {
           this.createAppointment();
         }, 1000);
-        this.$router.push("Menu");
+        this.showAlert()
+        setTimeout(() => {
+          this.$router.push("Menu");
+        }, 3000);
       } else {
-        alert("Kimlik numarası 11 haneli olmak zorunda");
+        this.$swal('HATA',"KİMLİK NUMARASI 11 HANELİ OLMALIDIR", "error");
       }
+    },
+
+    exit() {
+      this.$router.push("Menu");
+    },
+
+    showAlert() {
+      this.$swal({
+        icon: "success",
+        title:"RANDEVUNUZ BAŞARIYLA OLUŞTURULDU",
+        text:"MENÜYE YÖNLENDİRİLİYORSUNUZ",
+        timer: 3000
+        }
+      );
+    },
+
+    checkDate() {
+      this.appointmentDates.forEach((element) => {
+        if (element === this.Appointment.AppointmentDate) {
+          alert("Bu tarih ve saat seçilemez");
+        }
+      });
     },
 
     getPolyclinics() {

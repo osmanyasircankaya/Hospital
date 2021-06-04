@@ -34,7 +34,7 @@ namespace Infrastructure.Repository
 
         public async Task<int> GetAppointmentsCount()
         {
-            var sql = "SELECT COUNT(*) FROM Appointments ";
+            var sql = "SELECT COUNT(*) FROM Appointment";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
@@ -105,7 +105,7 @@ namespace Infrastructure.Repository
 
         public async Task<dynamic> GetMinimumAppointmentDay()
         {
-            var sql = "Select TOP 1 * from  ( Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate))As EnDusukGun";
+            var sql = "Select TOP 1 * from  ( Select Convert(date, AppointmentDate) AS Date, Count(Convert(date, AppointmentDate)) As AppointmentCount from Appointment Group By Convert(date, AppointmentDate))As EnDusukGun Order By AppointmentCount ASC";
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
