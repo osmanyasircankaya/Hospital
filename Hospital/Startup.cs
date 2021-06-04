@@ -15,6 +15,8 @@ namespace Hospital
 {
     public class Startup
     {
+        private string _connectionString = null;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +27,7 @@ namespace Hospital
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            _connectionString = Configuration["ConnectionStrings:DefaultConnection"];
             services.AddCors();
             services.AddInfrastructure();
             services.AddControllers();
