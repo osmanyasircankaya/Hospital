@@ -2,6 +2,7 @@ CREATE DATABASE Hospital
 
 USE Hospital
 
+
 CREATE TABLE Polyclinic
 (
 	Id		int PRIMARY KEY NOT NULL,	
@@ -39,6 +40,7 @@ CREATE TABLE Appointment
 	AddedOn		datetime NOT NULL,
 	ModifiedOn	datetime NULL
 )
+
 
 INSERT INTO Polyclinic
 VALUES
@@ -155,6 +157,7 @@ SET NOCOUNT ON;
           @body =@body
 END
 
+
 CREATE PROCEDURE IncSalaryDocsMail
 AS
 	DECLARE @Mail varchar(255)
@@ -173,7 +176,6 @@ AS
 					@body =@body
 			SET @Count += 1
 		END
-		
 		
 --Çoktan aza randevu alınan poliklinikler
 CREATE PROCEDURE FindAppointmentCountWithPolyclinicName
