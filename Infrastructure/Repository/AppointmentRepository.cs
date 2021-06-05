@@ -37,7 +37,7 @@ namespace Hospital.Infrastructure.Repository
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.ExecuteAsync(sql, new { Id = id },commandType:CommandType.StoredProcedure);
+                var result = await connection.ExecuteAsync(sql, new { Id = id }, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -48,7 +48,7 @@ namespace Hospital.Infrastructure.Repository
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QueryAsync<Appointment>(sql, new { PatientId = patientId },commandType:CommandType.StoredProcedure);
+                var result = await connection.QueryAsync<Appointment>(sql, new { PatientId = patientId }, commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
         }
@@ -70,7 +70,7 @@ namespace Hospital.Infrastructure.Repository
             using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 connection.Open();
-                var result = await connection.QuerySingleOrDefaultAsync<Appointment>(sql, new { Id = id },commandType:CommandType.StoredProcedure);
+                var result = await connection.QuerySingleOrDefaultAsync<Appointment>(sql, new { Id = id }, commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -101,17 +101,6 @@ namespace Hospital.Infrastructure.Repository
             {
                 connection.Open();
                 var result = await connection.QueryAsync<int>(sql, new { doctorId = doctorId });
-                return result.First();
-            }
-        }
-
-        public async Task<int> GetAppoimentsSizeByPolId(int polId, string date)
-        {
-            var sql = $"Select count(*) from Appointment where polId=@polId and AppointmentDate Between '{date}' and GETDATE()";
-            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
-            {
-                connection.Open();
-                var result = await connection.QueryAsync<int>(sql, new { polId = polId });
                 return result.First();
             }
         }
@@ -192,6 +181,28 @@ namespace Hospital.Infrastructure.Repository
                 List<dynamic> result = (await connection.QueryAsync(sql, commandType: CommandType.StoredProcedure)).ToList();
 
                 return result;
+            }
+        }
+
+        public async Task<bool> IsAvailable(string appointmentDate, int doctorId)
+        {
+            var sql = "SELECT * FROM Appointment WHERE AppointmentDate = @appointmentDate AND DoctorId = @doctorId";
+            using (var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Open();
+                var values = new { AppointmentDate = appointmentDate, DoctorId = doctorId };
+                var result = await connection.QueryAsync<Appointment>(sql, values);
+
+                var numberOfResults = result.ToList().Count();
+
+                if (numberOfResults == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
     }

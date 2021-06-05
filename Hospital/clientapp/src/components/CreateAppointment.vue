@@ -103,6 +103,8 @@ export default {
       polyclinics: [],
       doctors: [],
       appointmentDates: [],
+      isAvailable: false,
+      date: "",
       Appointment: {
         AppointmentDate: null,
         IsEmpty: false,
@@ -116,7 +118,7 @@ export default {
       dateProps: {
         headerColor: "blue",
         min: new Date().toISOString().substr(0, 10),
-        max: "2021-07-18",
+        max: "2021-08-18",
         showCurrent: true,
       },
       timeProps: {
@@ -132,6 +134,7 @@ export default {
         solo: true,
         suffix: "TSİ",
       },
+      days: ["monday", "tuesday", "friday"],
       mask: [
         /[1-9]/,
         /[0-9]/,
@@ -172,19 +175,32 @@ export default {
 
     allowedStep: (m) => m % 15 === 0,
 
+    // getAllowedDates(value) {
+    //   const date = moment(value);
+    //   const day = date.format("dddd").toLowerCase();
+    //   return this.days.includes(day);
+    // },
+
     submit() {
-      this.checkDate();
       if (this.Patient.Id.length === 11) {
-        this.createPatient()
+        this.getIsAvailable();
+      } else {
+        this.$swal("HATA", "KİMLİK NUMARASI 11 HANELİ OLMALIDIR", "error");
+      }
+    },
+
+    send() {
+      this.createPatient();
+      if (this.isAvailable) {
+        this.showAlert();
         setTimeout(() => {
           this.createAppointment();
-        }, 1000);
-        this.showAlert()
+        }, 500);
         setTimeout(() => {
           this.$router.push("Menu");
         }, 3000);
       } else {
-        this.$swal('HATA',"KİMLİK NUMARASI 11 HANELİ OLMALIDIR", "error");
+        this.$swal("HATA", "SEÇİLEN GÜN VE SAAT DOLU", "error");
       }
     },
 
@@ -195,18 +211,9 @@ export default {
     showAlert() {
       this.$swal({
         icon: "success",
-        title:"RANDEVUNUZ BAŞARIYLA OLUŞTURULDU",
-        text:"MENÜYE YÖNLENDİRİLİYORSUNUZ",
-        timer: 3000
-        }
-      );
-    },
-
-    checkDate() {
-      this.appointmentDates.forEach((element) => {
-        if (element === this.Appointment.AppointmentDate) {
-          alert("Bu tarih ve saat seçilemez");
-        }
+        title: "RANDEVUNUZ BAŞARIYLA OLUŞTURULDU",
+        text: "MENÜYE YÖNLENDİRİLİYORSUNUZ",
+        timer: 3000,
       });
     },
 
@@ -251,6 +258,25 @@ export default {
       ApiService.put("api/Patient", this.Patient).catch(({ response }) => {
         ApiService.showError(response);
       });
+    },
+
+    getIsAvailable() {
+      this.date = this.Appointment.AppointmentDate.toString();
+      this.date = moment(this.date).subtract(3,'h').format("yyyy-MM-DD hh:mm:ss A");
+      ApiService.setHeader();
+      ApiService.get(
+        "api/Appointment/IsAvailable/" +
+          this.date +
+          "/" +
+          this.Appointment.DoctorId
+      )
+        .then((response) => {
+          this.isAvailable = response.data;
+          this.send();
+        })
+        .catch(function (error) {
+          alert(error);
+        });
     },
 
     createAppointment() {

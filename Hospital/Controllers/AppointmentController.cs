@@ -68,22 +68,12 @@ namespace Hospital.WebApi.Controllers
             return Ok(data);
         }
 
-        //Polikliniğe göre belirli gün aralığındaki randevular
-        //Sorunlu.
-        [HttpGet("GetSizeByPolyclinicId/{polId}/{day}")]
-
-        public async Task<IActionResult> GetSizeByPolId(int polId, int day)
-        {
-            var data = await unitOfWork.Appointments.GetAppoimentsSizeByPolId(polId, _dateTimeParse(day));
-            return Ok(data);
-        }
         [HttpGet("GetAllSortedByDate")]
         public async Task<IActionResult> GetAllSortedByDate()
         {
             var data = await unitOfWork.Appointments.GetAppointmentsCountOrderByDate();
             return Ok(data);
         }
-
 
         [HttpPut]
         public async Task<IActionResult> Upsert(Appointment Appointment)
@@ -118,6 +108,12 @@ namespace Hospital.WebApi.Controllers
             var data = await unitOfWork.Appointments.GetWeekDayByAppointmentCount();
             if (data == null) return Ok();
             return Ok(data);
+        }
+        [HttpGet("IsAvailable/{appointmentDate}/{doctorId}")]
+        public async Task<bool> IsAvailable(string appointmentDate, int doctorId)
+        {
+            var data = await unitOfWork.Appointments.IsAvailable(appointmentDate, doctorId);
+            return data;
         }
 
         private string _dateTimeParse(int day)
