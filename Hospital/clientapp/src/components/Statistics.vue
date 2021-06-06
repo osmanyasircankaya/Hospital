@@ -180,14 +180,28 @@
         </template>
         <div style="background-color: #ffffff; height: 150px">
           <v-col cols="12" sm="12">
-            <v-select></v-select>
-            <span>{{ appointmentsSizeByDoctorId }}</span>
+            <v-select
+              v-model="doctorId"
+              :item-text="(item) => item.id"
+              :items="doctors"
+              label="Doktor"
+              solo
+              v-on:change="() => getAppointmentsSizeByDoctorId()"
+            >
+              <template slot="selection" slot-scope="data"
+                >{{ data.item.firstName }} {{ data.item.lastName }}</template
+              >
+              <template slot="item" slot-scope="data"
+                >{{ data.item.firstName }} {{ data.item.lastName }}</template
+              ></v-select
+            >
+            <span>Randevu Sayısı: {{ appointmentsSizeByDoctorId }}</span>
           </v-col>
         </div>
       </v-dialog>
     </div>
     <div class="d-flex justify-content-center mt-5 mb-5">
-      <v-dialog v-model="dialog7" width="600px">
+      <v-dialog v-model="dialog7" width="700px">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             color="#ffffff"
@@ -200,29 +214,68 @@
             Seçilen Hastanın Randevuları
           </v-btn>
         </template>
-        <v-simple-table>
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-left">Randevu Tarihi</th>
-                <th class="text-left">Doktor Adı</th>
-                <th class="text-left">Poliklinik Adı</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(item, index) in appointmentsDetailByDateRange"
-                :key="index"
+        <div style="background-color: #ffffff">
+          <v-row justify="center" align="center">
+            <v-col>
+              <v-select
+                v-model="patientId"
+                :item-text="(item) => item.id"
+                :items="patients"
+                label="Hasta"
+                solo
+                v-on:change="() => getAppointmentsDetailByDateRange()"
               >
-                <td>{{ item.AppointmentDate | momentWithHour }}</td>
-                <td>{{ item.DoctorName }}</td>
-                <td>{{ item.PolyclinicName }}</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
+                <template slot="selection" slot-scope="data">{{
+                  data.item.id
+                }}</template>
+                <template slot="item" slot-scope="data">{{
+                  data.item.id
+                }}</template></v-select
+              >
+            </v-col>
+            <v-col>
+              <v-select
+                v-model="dayValue"
+                :item-text="(item) => item.value"
+                :items="items"
+                label="Filtre"
+                solo
+                v-on:change="() => getAppointmentsDetailByDateRange()"
+              >
+                <template slot="selection" slot-scope="data">{{
+                  data.item.name
+                }}</template>
+                <template slot="item" slot-scope="data">{{
+                  data.item.name
+                }}</template
+                >></v-select
+              >
+            </v-col>
+          </v-row>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">Randevu Tarihi</th>
+                  <th class="text-left">Doktor Adı</th>
+                  <th class="text-left">Poliklinik Adı</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(item, index) in appointmentsDetailByDateRange"
+                  :key="index"
+                >
+                  <td>{{ item.AppointmentDate | momentWithHour }}</td>
+                  <td>{{ item.DoctorName }}</td>
+                  <td>{{ item.PolyclinicName }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </div>
       </v-dialog>
-      <v-dialog v-model="dialog10" width="600px">
+      <v-dialog v-model="dialog8" width="600px">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             color="#ffffff"
@@ -255,7 +308,7 @@
         </template>
         <div style="background-color: #ffffff; height: 50px">
           <h5>
-            {{ maximumAppointmentDay.Date | moment}}:
+            {{ maximumAppointmentDay.Date | moment }}:
             {{ maximumAppointmentDay.AppointmentCount }} Randevu
           </h5>
         </div>
@@ -274,7 +327,7 @@
         </template>
         <div style="background-color: #ffffff; height: 50px">
           <h5>
-            {{ minimumAppointmentDay.Date |moment }}:
+            {{ minimumAppointmentDay.Date | moment }}:
             {{ minimumAppointmentDay.AppointmentCount }} Randevu
           </h5>
         </div>
@@ -314,6 +367,17 @@ export default {
       appointmentsSizeByDoctorId: 0,
       appointmentsDetailByDateRange: [],
       appointmentsCount: 0,
+      patients: [],
+      patientId: "",
+      doctors: [],
+      doctorId: 0,
+      items: [
+        { name: "Son 7 Gün", value: 7 },
+        { name: "Son 15 Gün", value: 15 },
+        { name: "Son 1 Ay", value: 30 },
+        { name: "Son 3 Ay", value: 90 },
+      ],
+      dayValue: 365
     };
   },
 
@@ -326,8 +390,9 @@ export default {
     this.getWeekDayByAppointmentCount();
     this.getAppointmentCountByHours();
     this.getAppointmentsSizeByDoctorId();
-    this.getAppointmentsDetailByDateRange();
     this.getAppointmentsCount();
+    this.getPatients();
+    this.getDoctors();
   },
 
   filters: {
@@ -343,6 +408,28 @@ export default {
   methods: {
     exit() {
       this.$router.push("Menu");
+    },
+
+    localization() {
+      this.weekDayByAppointmentCount.forEach((element) => {
+        if (element.GUN === "Monday") {
+          element.GUN = "Pazartesi";
+        } else if (element.GUN === "Tuesday") {
+          element.GUN = "Salı";
+        } else if (element.GUN === "Wednesday") {
+          element.GUN = "Çarşamba";
+        } else if (element.GUN === "Thursday") {
+          element.GUN = "Perşembe";
+        } else if (element.GUN === "Friday") {
+          element.GUN = "Cuma";
+        } else if (element.GUN === "Saturday") {
+          element.GUN = "Cumartesi";
+        } else if (element.GUN === "Sunday") {
+          element.GUN = "Pazar";
+        } else {
+          return;
+        }
+      });
     },
 
     getAppointmensCountOrderByDate() {
@@ -405,6 +492,7 @@ export default {
       ApiService.get("api/Statistic/GetWeekDayByAppointmentCount")
         .then((response) => {
           this.weekDayByAppointmentCount = response.data;
+          this.localization();
         })
         .catch(function (error) {
           alert(error);
@@ -414,7 +502,10 @@ export default {
     getAppointmentsSizeByDoctorId() {
       ApiService.setHeader();
       ApiService.get(
-        "api/Statistic/GetAppointmentsSizeByDoctorId/" + 3 + "/" + 30
+        "api/Statistic/GetAppointmentsSizeByDoctorId/" +
+          this.doctorId +
+          "/" +
+          30
       )
         .then((response) => {
           this.appointmentsSizeByDoctorId = response.data;
@@ -428,9 +519,9 @@ export default {
       ApiService.setHeader();
       ApiService.get(
         "api/Statistic/GetAppointmentsDetailByDateRange/" +
-          "21443134132" +
+          this.patientId +
           "/" +
-          30
+          this.dayValue
       )
         .then((response) => {
           this.appointmentsDetailByDateRange = response.data;
@@ -442,7 +533,7 @@ export default {
 
     getAppointmentCountByHours() {
       ApiService.setHeader();
-      ApiService.get("api/Statistic/getAppointmentCountByHours/" + 9 + "/" + 17)
+      ApiService.get("api/Statistic/getAppointmentCountByHours/" + 8 + "/" + 18)
         .then((response) => {
           this.appointmentCountByHours = response.data;
         })
@@ -456,6 +547,28 @@ export default {
       ApiService.get("api/Statistic/GetAppointmentsCount")
         .then((response) => {
           this.appointmentsCount = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
+    getPatients() {
+      ApiService.setHeader();
+      ApiService.get("api/Patient")
+        .then((response) => {
+          this.patients = response.data;
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    },
+
+    getDoctors() {
+      ApiService.setHeader();
+      ApiService.get("api/Doctor")
+        .then((response) => {
+          this.doctors = response.data;
         })
         .catch(function (error) {
           alert(error);

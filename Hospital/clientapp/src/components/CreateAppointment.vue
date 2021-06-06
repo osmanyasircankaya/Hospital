@@ -175,12 +175,6 @@ export default {
 
     allowedStep: (m) => m % 15 === 0,
 
-    // getAllowedDates(value) {
-    //   const date = moment(value);
-    //   const day = date.format("dddd").toLowerCase();
-    //   return this.days.includes(day);
-    // },
-
     submit() {
       if (this.Patient.Id.length === 11) {
         this.getIsAvailable();
