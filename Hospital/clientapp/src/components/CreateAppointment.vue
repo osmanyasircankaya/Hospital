@@ -84,7 +84,7 @@
       <v-btn class="mr-4" color="error" type="submit" @click="exit()">
         MENÜYE DÖN
       </v-btn>
-      <v-btn class="mr-4" color="success" type="submit" @click="submit()">
+      <v-btn class="mr-4" color="success" @click="submit()">
         RANDEVU AL
       </v-btn>
     </v-form>
@@ -105,6 +105,7 @@ export default {
       appointmentDates: [],
       isAvailable: false,
       date: "",
+      dateTime: new Date(),
       Appointment: {
         AppointmentDate: null,
         IsEmpty: false,
@@ -120,6 +121,7 @@ export default {
         min: new Date().toISOString().substr(0, 10),
         max: "2021-08-18",
         showCurrent: true,
+        allowedDates: this.allowedDays,
       },
       timeProps: {
         useSeconds: false,
@@ -134,7 +136,6 @@ export default {
         solo: true,
         suffix: "TSİ",
       },
-      days: ["monday", "tuesday", "friday"],
       mask: [
         /[1-9]/,
         /[0-9]/,
@@ -174,6 +175,10 @@ export default {
     allowedHours: (v) => (v >= 8 || v <= 16) && v != 12,
 
     allowedStep: (m) => m % 15 === 0,
+
+    allowedDays(val) {
+      return moment(val).day() !== 0 && moment(val).day() !== 6;
+    },
 
     submit() {
       if (this.Patient.Id.length === 11) {
@@ -256,7 +261,9 @@ export default {
 
     getIsAvailable() {
       this.date = this.Appointment.AppointmentDate.toString();
-      this.date = moment(this.date).subtract(3,'h').format("yyyy-MM-DD hh:mm:ss A");
+      this.date = moment(this.date)
+        .subtract(3, "h")
+        .format("yyyy-MM-DD hh:mm:ss A");
       ApiService.setHeader();
       ApiService.get(
         "api/Appointment/IsAvailable/" +
